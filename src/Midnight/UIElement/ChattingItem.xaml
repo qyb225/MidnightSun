@@ -1,0 +1,24 @@
+﻿<UserControl
+    x:Class="Midnight.UIElement.ChattingItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Midnight.UIElement"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <RelativePanel Height="70">
+        <Image x:Name="Header" RelativePanel.AlignBottomWithPanel="True"
+               RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" 
+               Height="50" Width="50" Source="../Assets/IDPage/Test/logo.jpg" Margin="10" />
+        <StackPanel RelativePanel.AlignRightWithPanel="True" 
+                    RelativePanel.RightOf="Header" RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignBottomWithPanel="True">
+            <TextBlock x:Name="NickName" Margin="10 10 10 0" Text="巨硬" FontSize="17"/>
+            <TextBlock x:Name="LastMsg" Margin="10 5 10 10" Text="记得重装win10系统哦~" 
+                       HorizontalAlignment="Stretch" FontSize="13" Foreground="Gray"/>
+        </StackPanel>
+    </RelativePanel>
+</UserControl>
