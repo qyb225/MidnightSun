@@ -27,5 +27,15 @@ namespace Midnight.UIElement {
         private void SendButton_Click(object sender, RoutedEventArgs e) {
 
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
+            if (this.Frame.CanGoBack) {
+                this.Frame.GoBack();
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            this.Frame.Navigate(typeof(Moment));
+        }
     }
 }

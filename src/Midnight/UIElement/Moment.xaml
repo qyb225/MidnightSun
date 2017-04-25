@@ -5,9 +5,39 @@
     xmlns:local="using:Midnight.UIElement"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="using:Midnight.Models"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Padding="10" Text="朋友圈" HorizontalAlignment="Center"/>
+            <ScrollViewer Grid.Row="1" Margin="0 5 0 5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel Grid.Row="0" HorizontalAlignment="Stretch">
+                    <StackPanel x:Name="Cover" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                        <Image  Height="180" Stretch="UniformToFill" Source="../Assets/IDPage/Test/kugou.jpg" />
+                        <Grid Height="20"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 20 0" x:Name="Me" RelativePanel.AlignBottomWith="Cover" RelativePanel.AlignRightWithPanel="True">
+                        <TextBlock Text="Qubic" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="0, 0, 8, 0" Foreground="White"/>
+                        <Image Height="70" Width="70" Source="../Assets/IDPage/Test/tx.jpg"/>
+                    </StackPanel>
+                </RelativePanel>
+                <ListView Grid.Row="1" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModels.AllItems}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="md:MomentModelItems">
+                            <local:MomentItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

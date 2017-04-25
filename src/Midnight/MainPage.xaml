@@ -52,7 +52,7 @@
             </ListView>
         </StackPanel>
 
-        <Frame x:Name="ChattingFrame" Grid.Column="2" Padding="20" Background="White">
+        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="White">
             
         </Frame>
     </Grid>
