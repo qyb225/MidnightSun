@@ -7,13 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="using:Midnight.Models"
     mc:Ignorable="d">
-    <Grid HorizontalAlignment="Stretch">
-        <ListView IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModels.AllItems}" HorizontalAlignment="Stretch">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="md:ChattingItems">
-                    <local:ChattingBubble HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
+    <Grid HorizontalAlignment="Stretch" >
+        <ListView IsItemClickEnabled="False" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Margin" Value="5"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
     </Grid>
 </Page>

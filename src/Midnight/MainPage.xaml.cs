@@ -31,7 +31,7 @@ namespace Midnight
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e) {
             if (ChattingFrame.Visibility == Visibility.Visible) {
-                ChattingFrame.Navigate(typeof(IDPage));
+                ChattingFrame.Navigate(typeof(ChattingPage));
             } else {
                 this.Frame.Navigate(typeof(IDPage));
             }
