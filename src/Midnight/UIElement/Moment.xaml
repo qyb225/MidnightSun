@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Padding="10" Text="朋友圈" HorizontalAlignment="Center"/>
+        <TextBlock Padding="10" Text="朋友圈"/>
             <ScrollViewer Grid.Row="1" Margin="0 5 0 5">
             <Grid>
                 <Grid.RowDefinitions>

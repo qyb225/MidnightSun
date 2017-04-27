@@ -15,7 +15,7 @@
         <StackPanel>
             <TextBlock x:Name="FriendsName" Margin="10" Text="{x:Bind MomentModelItems.User}" Foreground="Gray"/>
             <TextBlock TextWrapping="WrapWholeWords" Margin="10 0 10 10"
-                       Text="{x:Bind MomentModelItems.Details}"/>
+                       Text="{x:Bind MomentModelItems.Details}" Foreground="LightGray" />
             <Image Width="200" Height="266" HorizontalAlignment="Left" Source="{x:Bind MomentModelItems.BmpImage}" Stretch="UniformToFill"/>
         </StackPanel>
     </StackPanel>

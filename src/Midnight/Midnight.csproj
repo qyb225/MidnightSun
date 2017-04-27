@@ -95,14 +95,22 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database\ChattingInfoDatabase.cs" />
     <Compile Include="Database\MomentDatabase.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChattingItems.cs" />
     <Compile Include="Models\MomentModelItems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIElement\ChattingBubble.xaml.cs">
+      <DependentUpon>ChattingBubble.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIElement\ChattingItem.xaml.cs">
       <DependentUpon>ChattingItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIElement\ChattingPage.xaml.cs">
+      <DependentUpon>ChattingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIElement\IDPage.xaml.cs">
       <DependentUpon>IDPage.xaml</DependentUpon>
@@ -113,6 +121,7 @@
     <Compile Include="UIElement\MomentItem.xaml.cs">
       <DependentUpon>MomentItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ChattingViewModels.cs" />
     <Compile Include="ViewModels\MomentViewModes.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +161,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UIElement\ChattingBubble.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIElement\ChattingItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIElement\ChattingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

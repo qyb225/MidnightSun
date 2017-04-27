@@ -26,6 +26,7 @@ namespace Midnight
         public MainPage()
         {
             this.InitializeComponent();
+            this.ChattingFrame.Navigate(typeof(ChattingPage));
         }
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e) {

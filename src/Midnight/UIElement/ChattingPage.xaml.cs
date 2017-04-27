@@ -19,22 +19,12 @@ namespace Midnight.UIElement {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-
-    public sealed partial class IDPage : Page {
-        public ViewModels.MomentViewModes ViewModels { get; set; }
-        public IDPage() {
+    public sealed partial class ChattingPage : Page {
+        public ViewModels.ChattingViewModels ViewModels { get; set; }
+            
+        public ChattingPage() {
             this.InitializeComponent();
-            this.ViewModels = new ViewModels.MomentViewModes();
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e) {
-            if (this.Frame.CanGoBack) {
-                this.Frame.GoBack();
-            }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            this.Frame.Navigate(typeof(Moment));
+            this.ViewModels = new ViewModels.ChattingViewModels();
         }
     }
 }

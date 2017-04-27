@@ -35,15 +35,15 @@
                     
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="270"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <RelativePanel Grid.Column="0" Background="Gray">
             <Image Height="30" RelativePanel.AlignTopWithPanel="True" Width="30" Margin="10" Source="Assets/IDPage/Test/tx.jpg"/>
             <AppBarButton Icon="Setting" HorizontalAlignment="Center" RelativePanel.AlignBottomWithPanel="True" Foreground="LightGray"/>
         </RelativePanel>
-        <StackPanel x:Name="FriendList" Grid.Column="1" Background="WhiteSmoke">
-            <AutoSuggestBox x:Name="Search" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
+        <StackPanel x:Name="FriendList" Grid.Column="1" Background="#313142">
+            <AutoSuggestBox x:Name="Search" Foreground="LightGray" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
                             Margin="10 10 10 30" HorizontalAlignment="Stretch" />
             <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
                 <ListView.Items>
@@ -52,8 +52,7 @@
             </ListView>
         </StackPanel>
 
-        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="White">
-            
+        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="#323246">
         </Frame>
     </Grid>
 </Page>
