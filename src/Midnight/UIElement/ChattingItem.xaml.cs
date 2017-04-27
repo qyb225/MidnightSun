@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Midnight.UIElement {
     public sealed partial class ChattingItem : UserControl {
+        
         public ChattingItem() {
             this.InitializeComponent();
         }

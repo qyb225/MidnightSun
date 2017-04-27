@@ -26,13 +26,21 @@ namespace Midnight.ViewModels {
         private Models.MomentModelItems selectedItem = default(Models.MomentModelItems);
         public Models.MomentModelItems SelectedItem { get { return selectedItem; } set { this.selectedItem = value; } }
 
+
         public MomentViewModes() {
             using (var conn = MomentDatabase.GetDbConnection()) {
 
                 var allDB = conn.Table<MomentModelItems>();
-                foreach (var item in allDB) {
-                    this.allItems.Add(new MomentModelItems() { id = item.id, User = item.User, Details = item.Details,
-                        Image = item.Image, BmpImage = new BitmapImage(new Uri("ms-appx://Midnight/" + item.Image)) });
+                int size = allDB.ToArray().Length;
+                for (int i = size - 1; i >= 0; --i) {
+                    var item = allDB.ElementAt(i);
+                    this.allItems.Add(new MomentModelItems() {
+                        id = item.id,
+                        User = item.User,
+                        Details = item.Details,
+                        Image = item.Image,
+                        BmpImage = new BitmapImage(new Uri("ms-appx://Midnight/" + item.Image))
+                    });
                 }
             }
         }

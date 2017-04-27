@@ -17,7 +17,7 @@
                     RelativePanel.RightOf="Header" RelativePanel.AlignTopWithPanel="True"
                     RelativePanel.AlignBottomWithPanel="True">
             <TextBlock x:Name="NickName" Margin="10 10 10 0" Text="Yokiho" Foreground="LightGray" FontSize="17"/>
-            <TextBlock x:Name="LastMsg" Margin="10 5 10 10" Text="早点休息吧，晚安么么~" 
+            <TextBlock x:Name="LastMsg" Margin="10 5 10 10" Text="" 
                        HorizontalAlignment="Stretch" FontSize="13" Foreground="Gray"/>
         </StackPanel>
     </RelativePanel>
