@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <Grid>
-        <VisualStateManager.VisualStateGroups>
+        <!--<VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="VisualStateMin1">
                     <VisualState.Setters>
@@ -30,7 +30,8 @@
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        </VisualStateManager.VisualStateGroups>-->
+        
 
                     
         <Grid.ColumnDefinitions>

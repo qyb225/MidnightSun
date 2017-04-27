@@ -20,11 +20,10 @@ namespace Midnight.UIElement {
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class ChattingPage : Page {
-        public ViewModels.ChattingViewModels ViewModels { get; set; }
-            
+
         public ChattingPage() {
             this.InitializeComponent();
-            this.ViewModels = new ViewModels.ChattingViewModels();
+            this.DataContext = new ViewModels.ChattingViewModels();
         }
     }
 }

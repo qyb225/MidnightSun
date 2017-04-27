@@ -103,9 +103,7 @@
     <Compile Include="Models\ChattingItems.cs" />
     <Compile Include="Models\MomentModelItems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIElement\ChattingBubble.xaml.cs">
-      <DependentUpon>ChattingBubble.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Selector\MessageItemDataTemplateSelector.cs" />
     <Compile Include="UIElement\ChattingItem.xaml.cs">
       <DependentUpon>ChattingItem.xaml</DependentUpon>
     </Compile>
@@ -160,10 +158,6 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIElement\ChattingBubble.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIElement\ChattingItem.xaml">
       <SubType>Designer</SubType>
