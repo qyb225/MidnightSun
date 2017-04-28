@@ -10,12 +10,12 @@
 
     <Grid x:Name="PersonInfo" HorizontalAlignment="Stretch" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <RelativePanel  Padding="5" Height="Auto">
+        <RelativePanel  Padding="5 8 5 5" Background="#525252" Height="Auto">
             <Button x:Name="BackButton" FontFamily="Segoe MDL2 Assets" Click="BackButton_Click"
-                        FontSize="25" Content="&#xE00E;" Foreground="LightGray"  Background="Transparent" Margin="0 5 10 5"
+                        FontSize="25" Content="&#xE00E;" Foreground="LightGray"  Background="Transparent" Margin="0 0 10 0"
                         RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
             <TextBlock Text="关于TA" Foreground="LightGray" RelativePanel.RightOf="BackButton" RelativePanel.AlignVerticalCenterWithPanel="True" />
         </RelativePanel>

@@ -7,24 +7,16 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Midnight.Selector
-{
-    public class MessageItemDataTemplateSelector : DataTemplateSelector
-    {
-        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
-
-        {
-            if (item is ChattingItems)
-            {
+namespace Midnight.Selector {
+    public class MessageItemDataTemplateSelector : DataTemplateSelector {
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container) {
+            if (item is ChattingItems) {
                 /*
                  * 1 means yourself
                  */
-                if ((item as ChattingItems).Sender == 1)
-                {
+                if ((item as ChattingItems).Sender == 1) {
                     return App.Current.Resources["SelfMessageDataTemplate"] as DataTemplate;
-                }
-                else
-                {
+                } else {
                     return App.Current.Resources["MessageDataTemplate"] as DataTemplate;
                 }
             }

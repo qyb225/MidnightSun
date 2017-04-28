@@ -18,8 +18,8 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Grid Grid.Column="0" Grid.Row="0" CornerRadius="4" Background="Green" Padding="13" >
-                    <TextBlock Text="{Binding Msg}" TextWrapping="WrapWholeWords" Foreground="White" FontSize="13" MaxWidth="300"></TextBlock>
+                <Grid Grid.Column="0" Grid.Row="0" CornerRadius="4" Background="#49494A" Padding="13" >
+                    <TextBlock Text="{Binding Msg}" TextWrapping="WrapWholeWords" Foreground="LightGray" FontSize="13" MaxWidth="300"></TextBlock>
                 </Grid>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="0">
                     <Image Height="35" Width="35" Source="../Assets/IDPage/Test/tx.jpg" Margin="10,0,0,10" VerticalAlignment="Top" />
