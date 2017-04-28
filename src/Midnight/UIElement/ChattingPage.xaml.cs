@@ -25,5 +25,10 @@ namespace Midnight.UIElement {
             this.InitializeComponent();
             this.DataContext = new ViewModels.ChattingViewModels();
         }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(IDPage));
+        }
     }
 }
