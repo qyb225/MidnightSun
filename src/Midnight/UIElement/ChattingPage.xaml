@@ -14,7 +14,7 @@
             <RowDefinition Height="130"></RowDefinition>
         </Grid.RowDefinitions>
         <RelativePanel Grid.Row="0" Background="#525252">
-            <TextBlock x:Name="Inputing" Text="" Margin="10,10,0,10" 
+            <TextBlock x:Name="Inputing" Text="" Margin="20,10,0,10" 
                        FontSize="15" Foreground="White" RelativePanel.AlignVerticalCenterWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"/>
             <TextBlock Foreground="White" Text="Yokiho" RelativePanel.AlignVerticalCenterWithPanel="True"
@@ -40,7 +40,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
                 <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE170;" Background="Transparent" Foreground="LightGray"/>
                 <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xEB9F;" Background="Transparent" Foreground="LightGray"/>
             </StackPanel>
@@ -49,8 +49,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="Choose0" Foreground="White" Grid.Column="0" Margin="5 0 5 0" Visibility="Collapsed" Click="Choose0_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                <Button x:Name="Choose1" Foreground="White" Grid.Column="1" Margin="5 0 5 0" Visibility="Collapsed" Click="Choose1_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Button x:Name="Choose0" Foreground="White" Grid.Column="0" Margin="5 0 2 0" Visibility="Collapsed" Click="Choose0_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Button x:Name="Choose1" Foreground="White" Grid.Column="1" Margin="2 0 5 0" Visibility="Collapsed" Click="Choose1_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </Grid>
             <RelativePanel Grid.Row="2" Margin="5">
                 <Button Foreground="LightGray" Content="发送" RelativePanel.AlignRightWithPanel="True" FontSize="13"/>
