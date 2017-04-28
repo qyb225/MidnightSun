@@ -45,7 +45,7 @@
         </RelativePanel>
         <StackPanel x:Name="FriendList" Grid.Column="1" Background="#464646">
             <AutoSuggestBox x:Name="Search" Foreground="LightGray" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
-                            Margin="10 10 10 30" HorizontalAlignment="Stretch" />
+                            Margin="10" HorizontalAlignment="Stretch" />
             <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
                 <ListView.Items>
                     <uie:ChattingItem/>
@@ -53,7 +53,6 @@
             </ListView>
         </StackPanel>
 
-        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="#606060">
-        </Frame>
+        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="#606060"/>
     </Grid>
 </Page>
