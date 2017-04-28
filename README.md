@@ -1,4 +1,4 @@
-# MidnightSun Test
+# MidnightSun
 
 > This is a story about murder, betrayal
 > 
