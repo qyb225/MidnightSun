@@ -40,7 +40,7 @@ namespace Midnight.ViewModels {
             }
         }
 
-        public void AddChattingItem(Models.MomentModelItems x) {
+        public void AddMomentItem(Models.MomentModelItems x) {
             this.allItems.Add(x);
             using (var conn = MomentDatabase.GetDbConnection()) {
                 var Database = conn.Table<Models.MomentModelItems>();
@@ -49,7 +49,7 @@ namespace Midnight.ViewModels {
             NotifyPropertyChanged();
         }
 
-        public void AddChattingItem(string detail, string img) {
+        public void AddMomentItem(string detail, string img) {
             Models.MomentModelItems theNew = new Models.MomentModelItems() { Details = detail,
                 Image = img,
                 BmpImage = new BitmapImage(new Uri("ms-appx://Midnight/" + img))
