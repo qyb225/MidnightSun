@@ -29,5 +29,9 @@ namespace Midnight.UIElement {
         private void AppBarButton_Click(object sender, RoutedEventArgs e) {
             this.Frame.Navigate(typeof(IDPage));
         }
+
+        private void TheChattingItem_SizeChanged(object sender, SizeChangedEventArgs e) {
+            ChattingScrollViewer.ChangeView(null, TheChattingItem.ActualHeight, null);
+        }
     }
 }

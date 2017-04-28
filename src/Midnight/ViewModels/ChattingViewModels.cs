@@ -35,8 +35,24 @@ namespace Midnight.ViewModels {
             }
         }
 
-        private Models.ChattingItems selectedItem = default(Models.ChattingItems);
-        public Models.ChattingItems SelectedItem { get { return selectedItem; } set { this.selectedItem = value; } }
+        public void AddChattingItem(Models.ChattingItems x) {
+            this.allItems.Add(x);
+            using (var conn = ChattingInfoDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.ChattingItems>();
+                conn.Insert(x);
+            }
+            NotifyPropertyChanged();
+        }
+
+        public void AddChattingItem(int sender, string message) {
+            Models.ChattingItems theNew = new Models.ChattingItems() { Sender = sender, Msg = message };
+            this.allItems.Add(theNew);
+            using (var conn = ChattingInfoDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.ChattingItems>();
+                conn.Insert(theNew);
+            }
+            NotifyPropertyChanged();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

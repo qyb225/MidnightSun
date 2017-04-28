@@ -14,20 +14,6 @@ namespace Midnight.Models {
         [AutoIncrement]
         public int id { set; get; }
 
-
-        private string user;
-        [MaxLength(20)]
-        public string User {
-            get { return this.user; }
-            set {
-                if (user != value) {
-                    user = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-
         private string details;
         [MaxLength(100)]
         public string Details {

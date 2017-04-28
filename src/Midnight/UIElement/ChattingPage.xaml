@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="130"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="#525252">
             <Grid.ColumnDefinitions>
@@ -20,8 +21,8 @@
             <TextBlock  Foreground="White" Grid.Column="0" Text="Yokiho" HorizontalAlignment="Center" Margin="0,10,0,10" FontSize="18"/>
             <AppBarButton Grid.Column="1" HorizontalAlignment="Right" Icon="Contact" Foreground="White" Click="AppBarButton_Click"/>
         </Grid>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-            <ListView IsItemClickEnabled="False" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
+        <ScrollViewer x:Name="ChattingScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+            <ListView IsItemClickEnabled="False" x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -30,5 +31,19 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </ScrollViewer>
+        <Grid Grid.Row="2" Background="#656565">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE170;" Background="Transparent" Foreground="LightGray"/>
+                <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xEB9F;" Background="Transparent" Foreground="LightGray"/>
+            </StackPanel>
+            <RelativePanel Grid.Row="2" Margin="5">
+                <Button Foreground="LightGray" Content="发送" RelativePanel.AlignRightWithPanel="True" FontSize="13"/>
+            </RelativePanel>
+        </Grid>
     </Grid>
 </Page>

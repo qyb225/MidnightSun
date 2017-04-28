@@ -19,8 +19,8 @@
                         RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
             <TextBlock Text="关于TA" Foreground="LightGray" RelativePanel.RightOf="BackButton" RelativePanel.AlignVerticalCenterWithPanel="True" />
         </RelativePanel>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" >
-            <Grid>
+        <ScrollViewer x:Name="ScrollV" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Name="Diary">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
