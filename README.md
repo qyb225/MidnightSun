@@ -11,10 +11,11 @@
 
 ---
 
-## Demo:
+## 分支选择Demo:
 
-![](./demoImage/20170428.gif)
+![](./demoImage/201704281.gif)
 
+![](./demoImage/201704282.gif)
 
 ---
 
