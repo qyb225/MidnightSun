@@ -33,7 +33,7 @@ namespace Midnight
             if (ChattingFrame.Visibility == Visibility.Visible) {
                 ChattingFrame.Navigate(typeof(ChattingPage));
             } else {
-                this.Frame.Navigate(typeof(IDPage));
+                this.Frame.Navigate(typeof(ChattingPage));
             }
         }
     }

@@ -10,7 +10,7 @@ using Windows.Storage;
 
 namespace Midnight.Database {
     public static class MomentDatabase {
-        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Moment0.db");
+        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "MomentTest.db");
 
         public static SQLiteConnection GetDbConnection() {
             // 连接数据库，如果数据库文件不存在则创建一个空数据库。

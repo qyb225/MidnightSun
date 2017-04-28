@@ -23,10 +23,6 @@ namespace Midnight.ViewModels {
             }
         }
 
-        private Models.MomentModelItems selectedItem = default(Models.MomentModelItems);
-        public Models.MomentModelItems SelectedItem { get { return selectedItem; } set { this.selectedItem = value; } }
-
-
         public MomentViewModes() {
             using (var conn = MomentDatabase.GetDbConnection()) {
 
@@ -36,13 +32,34 @@ namespace Midnight.ViewModels {
                     var item = allDB.ElementAt(i);
                     this.allItems.Add(new MomentModelItems() {
                         id = item.id,
-                        User = item.User,
                         Details = item.Details,
                         Image = item.Image,
                         BmpImage = new BitmapImage(new Uri("ms-appx://Midnight/" + item.Image))
                     });
                 }
             }
+        }
+
+        public void AddMomentItem(Models.MomentModelItems x) {
+            this.allItems.Add(x);
+            using (var conn = MomentDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.MomentModelItems>();
+                conn.Insert(x);
+            }
+            NotifyPropertyChanged();
+        }
+
+        public void AddMomentItem(string detail, string img) {
+            Models.MomentModelItems theNew = new Models.MomentModelItems() { Details = detail,
+                Image = img,
+                BmpImage = new BitmapImage(new Uri("ms-appx://Midnight/" + img))
+            };
+            this.allItems.Add(theNew);
+            using (var conn = MomentDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.MomentModelItems>();
+                conn.Insert(theNew);
+            }
+            NotifyPropertyChanged();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
