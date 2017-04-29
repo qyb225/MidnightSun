@@ -19,6 +19,13 @@ namespace Midnight.UIElement {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+
+    /*
+     * 一些坑：
+     * 1. 需要数据库不停记录choose(故事线) 和 count
+     * 2. 一切的消息收发都在该页面内进行，也就是说，如果离开了该页面（去看朋友圈），则消息收发无法进行，与现实不符，要推翻目前写法。
+     */
+
     public sealed partial class ChattingPage : Page {
         private string choose = "X1";
         private int count = 0;
@@ -38,12 +45,14 @@ namespace Midnight.UIElement {
             Timer.Start();
         }
 
+        /**/
         private void loadABranchStoryData() {
             using (var conn = Database.StoryDatabase.GetDbConnection(choose + ".db")) {
                 var aBranchStory = conn.Table<StoryInfo.StoryItem>();
                 branchLength = aBranchStory.ToArray().Length;
                 int i = count = 0;
                 if (branchLength <= 0) {
+                    Inputing.Text = "";
                     Timer.Stop();
                 }
                 aBranch = new StoryInfo.StoryItem[branchLength];
@@ -59,7 +68,9 @@ namespace Midnight.UIElement {
             if (count >= branchLength) {
                 loadABranchStoryData();
                 Inputing.Text = "";
-            } else if (aBranch[count].Next == "choose") {
+            }
+            /*问题的标志，需要调取下面两个作为回答选项*/
+            else if (aBranch[count].Next == "choose") {
                 ViewModel.AddChattingItem(0, aBranch[count++].Msg);
                 Choose0.Visibility = Visibility.Visible;
                 Choose0.Content = aBranch[count++].Msg;
@@ -67,11 +78,15 @@ namespace Midnight.UIElement {
                 Choose1.Content = aBranch[count++].Msg;
                 Inputing.Text = "";
                 Timer.Stop();
-            } else if (aBranch[count].Next.Length != 0) {
+            }
+            /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
+            else if (aBranch[count].Next.Length != 0) {
                 ViewModel.AddChattingItem(0, aBranch[count].Msg);
                 this.DataContext = ViewModel;
                 choose = aBranch[count++].Next;
-            } else {
+            }
+            /*普通消息，直接展示*/
+            else {
                 ViewModel.AddChattingItem(0, aBranch[count++].Msg);
                 this.DataContext = ViewModel;
             }
@@ -86,10 +101,14 @@ namespace Midnight.UIElement {
         }
 
         private void Choose0_Click(object sender, RoutedEventArgs e) {
+            /*进入0支线*/
             choose += "0";
+            /*将选项的文字作为"你"说的话，添加到页面的viewmodel里*/ 
             ViewModel.AddChattingItem(1, Choose0.Content.ToString());
+            /*隐藏两个按钮*/
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
+            /*更新dataContext*/
             this.DataContext = ViewModel;
             Timer.Start();
             Inputing.Text = "对方正在输入...";
@@ -102,6 +121,7 @@ namespace Midnight.UIElement {
             Choose1.Visibility = Visibility.Collapsed;
             this.DataContext = ViewModel;
             Timer.Start();
+            Inputing.Text = "对方正在输入...";
         }
     }
 }
