@@ -5,7 +5,6 @@
     xmlns:local="using:Midnight"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uie="using:Midnight.UIElement"
     mc:Ignorable="d">
 
     <Grid>
@@ -34,23 +33,14 @@
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="270"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <RelativePanel Grid.Column="0" Background="#353535">
             <Image Height="30" RelativePanel.AlignTopWithPanel="True" Width="30" Margin="10" Source="Assets/IDPage/Test/tx.jpg"/>
             <AppBarButton Icon="Setting" HorizontalAlignment="Center" RelativePanel.AlignBottomWithPanel="True" Foreground="LightGray"/>
         </RelativePanel>
-        <StackPanel x:Name="FriendList" Grid.Column="1" Background="#464646">
-            <AutoSuggestBox x:Name="Search" Foreground="LightGray" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
-                            Margin="10" HorizontalAlignment="Stretch" />
-            <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
-                <ListView.Items>
-                    <uie:ChattingItem/>
-                </ListView.Items>
-            </ListView>
-        </StackPanel>
+        
 
-        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="#606060"/>
+        <Frame x:Name="ChattingFrame" Grid.Column="1" HorizontalAlignment="Stretch" Background="#606060"/>
     </Grid>
 </Page>

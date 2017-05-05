@@ -32,7 +32,8 @@ namespace Midnight.UIElement {
         private int branchLength;
         private DispatcherTimer Timer;
         private StoryInfo.StoryItem[] aBranch;
-        private ViewModels.ChattingViewModels ViewModel;
+        public ViewModels.ChattingViewModels ViewModel { set; get; }
+        public ViewModels.MomentViewModes ViewModels { get; set; }
 
         public ChattingPage() {
             this.InitializeComponent();
@@ -92,10 +93,6 @@ namespace Midnight.UIElement {
             }
         }
 
-        private void AppBarButton_Click(object sender, RoutedEventArgs e) {
-            this.Frame.Navigate(typeof(IDPage));
-        }
-
         private void TheChattingItem_SizeChanged(object sender, SizeChangedEventArgs e) {
             ChattingScrollViewer.ChangeView(null, TheChattingItem.ActualHeight, null);
         }
@@ -122,6 +119,23 @@ namespace Midnight.UIElement {
             this.DataContext = ViewModel;
             Timer.Start();
             Inputing.Text = "对方正在输入...";
+        }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e) {
+            ChattingWindow.Visibility = Visibility.Visible;
+            PersonInfo.Visibility = Visibility.Collapsed;
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
+            ChattingWindow.Visibility = Visibility.Visible;
+            PersonInfo.Visibility = Visibility.Collapsed;
+        }
+
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e) {
+            ChattingWindow.Visibility = Visibility.Collapsed;
+            PersonInfo.UpdateLayout();
+            PersonInfo.Visibility = Visibility.Visible;
         }
     }
 }

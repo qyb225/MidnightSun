@@ -6,55 +6,113 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="using:Midnight.Models"
+    xmlns:uie="using:Midnight.UIElement"
     mc:Ignorable="d">
-    <Grid HorizontalAlignment="Stretch" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="130"></RowDefinition>
-        </Grid.RowDefinitions>
-        <RelativePanel Grid.Row="0" Background="#525252">
-            <TextBlock x:Name="Inputing" Text="" Margin="20,10,0,10" 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="244"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel x:Name="FriendList" Grid.Column="0" Background="#464646">
+            <AutoSuggestBox x:Name="Search" Foreground="LightGray" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
+                            Margin="10" HorizontalAlignment="Stretch" />
+            <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
+                <ListView.Items>
+                    <uie:ChattingItem/>
+                </ListView.Items>
+            </ListView>
+        </StackPanel>
+        <Grid x:Name="ChattingWindow" HorizontalAlignment="Stretch" Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="130"></RowDefinition>
+            </Grid.RowDefinitions>
+            <RelativePanel Grid.Row="0" Background="#525252">
+                <TextBlock x:Name="Inputing" Text="" Margin="20,10,0,10" 
                        FontSize="15" Foreground="White" RelativePanel.AlignVerticalCenterWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"/>
-            <TextBlock Foreground="White" Text="Yokiho" RelativePanel.AlignVerticalCenterWithPanel="True"
+                <TextBlock Foreground="White" Text="Yokiho" RelativePanel.AlignVerticalCenterWithPanel="True"
                        RelativePanel.AlignHorizontalCenterWithPanel="True"
                        Margin="0,10,0,10" FontSize="18"/>
-            <AppBarButton RelativePanel.AlignRightWithPanel="True" Icon="Contact" 
+                <AppBarButton RelativePanel.AlignRightWithPanel="True" Icon="Contact" 
                           Foreground="White" Click="AppBarButton_Click"/>
-        </RelativePanel>
-        
-        <ScrollViewer x:Name="ChattingScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-            <ListView IsItemClickEnabled="False" x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                        <Setter Property="Margin" Value="5,8,5,8"></Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
-        </ScrollViewer>
-        <Grid Grid.Row="2" Background="#656565">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE170;" Background="Transparent" Foreground="LightGray"/>
-                <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xEB9F;" Background="Transparent" Foreground="LightGray"/>
-            </StackPanel>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="Choose0" Foreground="White" Grid.Column="0" Margin="5 0 2 0" Visibility="Collapsed" Click="Choose0_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                <Button x:Name="Choose1" Foreground="White" Grid.Column="1" Margin="2 0 5 0" Visibility="Collapsed" Click="Choose1_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            </Grid>
-            <RelativePanel Grid.Row="2" Margin="5">
-                <Button Foreground="LightGray" Content="发送" RelativePanel.AlignRightWithPanel="True" FontSize="13"/>
             </RelativePanel>
+
+            <ScrollViewer x:Name="ChattingScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                <ListView IsItemClickEnabled="False" x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                            <Setter Property="Margin" Value="5,8,5,8"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </ScrollViewer>
+            <Grid Grid.Row="2" Background="#656565">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                    <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE170;" Background="Transparent" Foreground="LightGray"/>
+                    <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xEB9F;" Background="Transparent" Foreground="LightGray"/>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="Choose0" Foreground="White" Grid.Column="0" Margin="5 0 2 0" Visibility="Collapsed" Click="Choose0_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button x:Name="Choose1" Foreground="White" Grid.Column="1" Margin="2 0 5 0" Visibility="Collapsed" Click="Choose1_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+                <RelativePanel Grid.Row="2" Margin="5">
+                    <Button Foreground="LightGray" Content="发送" RelativePanel.AlignRightWithPanel="True" FontSize="13"/>
+                </RelativePanel>
+            </Grid>
+        </Grid>
+        
+        <Grid x:Name="PersonInfo" HorizontalAlignment="Stretch" Grid.Column="1" Visibility="Collapsed" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <RelativePanel  Padding="5 8 5 5" Background="#525252" Height="Auto">
+                <Button x:Name="BackButton" FontFamily="Segoe MDL2 Assets" Click="BackButton_Click"
+                        FontSize="25" Content="&#xE00E;" Foreground="LightGray"  Background="Transparent" Margin="0 0 10 0"
+                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
+                <TextBlock Text="关于TA" Foreground="LightGray" RelativePanel.RightOf="BackButton" RelativePanel.AlignVerticalCenterWithPanel="True" />
+            </RelativePanel>
+            <ScrollViewer x:Name="ScrollV" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                <Grid x:Name="Diary">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <RelativePanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+                        <StackPanel x:Name="Cover" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                            <Image  Height="250" Stretch="UniformToFill" Source="../Assets/IDPage/Test/kugou.jpg" />
+                            <Grid Height="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="20 0 0 0" x:Name="Me" RelativePanel.AlignBottomWith="Cover" RelativePanel.AlignLeftWithPanel="True">
+                            <Image Height="70" Width="70" Source="../Assets/IDPage/Test/logo.jpg"/>
+                            <TextBlock Text="Yokiho" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="White"/>
+                        </StackPanel>
+                    </RelativePanel>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="签名" VerticalAlignment="Top" Margin="20 0 0 0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Foreground="LightGray" Padding="0 20 0 20" Margin="0 0 20 0" TextWrapping="WrapWholeWords" Text="我们头上没有太阳，但是却不觉得黑暗，因为有能代替太阳的人在……"  VerticalAlignment="Top"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="兴趣" VerticalAlignment="Center" Margin="20 0 0 0" />
+                    <TextBlock x:Name="Hobby" Grid.Row="2" Foreground="LightGray" Padding="0 20 0 20" Grid.Column="1"  Margin="0 0 20 0" Text="音乐，电影，幻想" VerticalAlignment="Center"/>
+                    <local:Moment Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 30 0 20" />
+                </Grid>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Page>
