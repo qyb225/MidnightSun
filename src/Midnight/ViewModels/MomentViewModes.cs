@@ -41,7 +41,7 @@ namespace Midnight.ViewModels {
         }
 
         public void AddMomentItem(Models.MomentModelItems x) {
-            this.allItems.Add(x);
+            this.allItems.Insert(0, x);
             using (var conn = MomentDatabase.GetDbConnection()) {
                 var Database = conn.Table<Models.MomentModelItems>();
                 conn.Insert(x);
@@ -54,7 +54,7 @@ namespace Midnight.ViewModels {
                 Image = img,
                 BmpImage = new BitmapImage(new Uri("ms-appx://Midnight/" + img))
             };
-            this.allItems.Add(theNew);
+            this.allItems.Insert(0, theNew);
             using (var conn = MomentDatabase.GetDbConnection()) {
                 var Database = conn.Table<Models.MomentModelItems>();
                 conn.Insert(theNew);

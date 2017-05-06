@@ -18,7 +18,34 @@
                             Margin="10" HorizontalAlignment="Stretch" />
             <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
                 <ListView.Items>
-                    <uie:ChattingItem/>
+                    <RelativePanel Height="80">
+                        <Grid x:Name="Header" RelativePanel.AlignBottomWithPanel="True"
+                               RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0 10 0 10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="10"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Height="50" Width="50" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Source="../Assets/IDPage/Test/logo.jpg"/>
+                            <Ellipse x:Name="MsgCircle" Visibility="Collapsed" Fill="Red" Height="20" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2" Width="20"/>
+                            <TextBlock x:Name="NumInfo" Visibility="Collapsed" Foreground="White" Margin="0 0 0 2" Text="{x:Bind UnRead, Mode=TwoWay}" FontSize="13" TextAlignment="Center"
+                                       Height="18" Grid.RowSpan="2" Grid.Column="1"
+                                       Grid.ColumnSpan="2" Width="20"/>
+                        </Grid>
+
+                        <StackPanel RelativePanel.AlignRightWithPanel="True" 
+                                    RelativePanel.RightOf="Header" RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignBottomWithPanel="True">
+                            <TextBlock x:Name="NickName" Margin="4 20 10 0" Text="Yokiho" Foreground="LightGray" FontSize="17"/>
+                            <TextBlock x:Name="LastMsg" Margin="4 5 10 10" Text="{x:Bind LastMessage, Mode=TwoWay}" 
+                                       HorizontalAlignment="Stretch" FontSize="13" Foreground="Gray"/>
+                        </StackPanel>
+                    </RelativePanel>
                 </ListView.Items>
             </ListView>
         </StackPanel>
@@ -72,7 +99,7 @@
                 </RelativePanel>
             </Grid>
         </Grid>
-        
+
         <Grid x:Name="PersonInfo" HorizontalAlignment="Stretch" Grid.Column="1" Visibility="Collapsed" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -110,7 +137,15 @@
                     <TextBlock Grid.Row="1" Grid.Column="1" Foreground="LightGray" Padding="0 20 0 20" Margin="0 0 20 0" TextWrapping="WrapWholeWords" Text="我们头上没有太阳，但是却不觉得黑暗，因为有能代替太阳的人在……"  VerticalAlignment="Top"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="兴趣" VerticalAlignment="Center" Margin="20 0 0 0" />
                     <TextBlock x:Name="Hobby" Grid.Row="2" Foreground="LightGray" Padding="0 20 0 20" Grid.Column="1"  Margin="0 0 20 0" Text="音乐，电影，幻想" VerticalAlignment="Center"/>
-                    <local:Moment Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 30 0 20" />
+                    <Grid x:Name="TheMoment" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 30 0 20">
+                        <ListView IsItemClickEnabled="False" ItemsSource="{x:Bind MomentViewModels.AllItems}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="md:MomentModelItems">
+                                    <local:MomentItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
                 </Grid>
             </ScrollViewer>
         </Grid>
