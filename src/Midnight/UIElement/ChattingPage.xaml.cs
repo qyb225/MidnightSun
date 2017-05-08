@@ -36,15 +36,28 @@ namespace Midnight.UIElement {
         private StoryInfo.StoryItem[] aBranch;
         private DateTime runTime; //s
         private DispatcherTimer delayTimer;
+        private bool ifInit = true;
         public ViewModels.ChattingViewModels ViewModel { set; get; }
         public ViewModels.MomentViewModes MomentViewModels { get; set; }
-        
+        public ViewModels.NewsViewModels NewsViewModel { set; get; }
+
         private string lastMsg;
         public string LastMessage {
             get { return lastMsg; }
             set {
                 if (lastMsg != value) {
                     lastMsg = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string lastNews;
+        public string LastNews {
+            get { return lastNews; }
+            set {
+                if (lastNews != value) {
+                    lastNews = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -61,13 +74,36 @@ namespace Midnight.UIElement {
             }
         }
 
+        private int unReadNews;
+        public int UnReadNews {
+            get { return unReadNews; }
+            set {
+                if (unReadNews != value) {
+                    unReadNews = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public ChattingPage() {
             this.InitializeComponent();
             ViewModel = new ViewModels.ChattingViewModels();
             this.MomentViewModels = new ViewModels.MomentViewModes();
-            LastMessage = chattingItemHandle(ViewModel.AllItems.Last().Msg);
+            NewsViewModel = new ViewModels.NewsViewModels();
+            if (ViewModel.AllItems.Count == 0) {
+                LastMessage = "";
+            } else {
+                LastMessage = chattingItemHandle(ViewModel.AllItems.Last().Msg);
+            }
+
+            if (NewsViewModel.AllItems.Count == 0) {
+                LastNews = "";
+            } else {
+                LastNews = chattingItemHandle(NewsViewModel.AllItems.Last().Details);
+            }
+
             this.DataContext = ViewModel;
-            
+
             Timer = new DispatcherTimer();
             Timer.Interval = new TimeSpan(0, 0, 4);
             Timer.Tick += loadMessage;
@@ -116,10 +152,22 @@ namespace Midnight.UIElement {
         }
 
         private string chattingItemHandle(string str) {
-            if (PersonInfo.Visibility == Visibility.Visible) {
-                ++UnRead;
-                MsgCircle.Visibility = Visibility.Visible;
-                NumInfo.Visibility = Visibility.Visible;
+            if (NewsInfo.Visibility == Visibility.Collapsed) {
+                if (UnReadNews > 0) {
+                    NewsCircle.Visibility = Visibility.Visible;
+                    NumInfoNews.Visibility = Visibility.Visible;
+                }
+            } else {
+                UnReadNews = 0;
+            }
+
+            if (ChattingWindow.Visibility == Visibility.Collapsed) {
+                if (UnRead > 0) {
+                    MsgCircle.Visibility = Visibility.Visible;
+                    NumInfo.Visibility = Visibility.Visible;
+                }
+            } else {
+                UnRead = 0;
             }
             if (str.Length > 12) {
                 str = str.Substring(0, 9);
@@ -156,10 +204,22 @@ namespace Midnight.UIElement {
             /*问题的标志，需要调取下面两个作为回答选项*/
             else if (aBranch[count].Next == "choose") {
                 saveProcess();
+                ifInit = false;
                 Choose0.Visibility = Visibility.Visible;
-                Choose0.Content = aBranch[count++].Msg;
+                Choose0Text.Text = aBranch[count++].Msg;
                 Choose1.Visibility = Visibility.Visible;
-                Choose1.Content = aBranch[count++].Msg;
+                Choose1Text.Text = aBranch[count++].Msg;
+                Inputing.Text = "";
+                Timer.Stop();
+            }
+            /*直接进行*/
+            else if (aBranch[count].Next == "choose0") {
+                saveProcess();
+                ifInit = true;
+                Choose0.Visibility = Visibility.Visible;
+                Choose0Text.Text = aBranch[count++].Msg;
+                Choose1.Visibility = Visibility.Visible;
+                Choose1Text.Text = aBranch[count++].Msg;
                 Inputing.Text = "";
                 Timer.Stop();
             }
@@ -172,6 +232,14 @@ namespace Midnight.UIElement {
                 Timer.Stop();
                 delayTimer.Start();
             }
+            /*新闻*/
+            else if (aBranch[count].Next == "news") {
+                Inputing.Text = "";
+                ++UnReadNews;
+                LastNews = chattingItemHandle(aBranch[count].Msg);
+                NewsViewModel.AddNewsItem(aBranch[count++].Msg);
+                saveProcess();
+            }
             /*发朋友圈的图片地址*/
             else if (aBranch[count].Next.Length > 6) {
                 this.MomentViewModels.AddMomentItem(aBranch[count].Msg, aBranch[count].Next);
@@ -181,6 +249,7 @@ namespace Midnight.UIElement {
             /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
             else if (aBranch[count].Next.Length != 0) {
                 ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                ++UnRead;
                 LastMessage = chattingItemHandle(aBranch[count].Msg);
                 this.DataContext = ViewModel;
                 choose = aBranch[count++].Next;
@@ -189,6 +258,7 @@ namespace Midnight.UIElement {
             /*普通消息，直接展示*/
             else {
                 ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                ++UnRead;
                 LastMessage = chattingItemHandle(aBranch[count++].Msg);
                 this.DataContext = ViewModel;
                 saveProcess();
@@ -201,11 +271,13 @@ namespace Midnight.UIElement {
 
         private void Choose0_Click(object sender, RoutedEventArgs e) {
             /*进入0支线*/
-            choose += "0";
-            /*将选项的文字作为"你"说的话，添加到页面的viewmodel里*/ 
-            ViewModel.AddChattingItem(1, Choose0.Content.ToString());
+            if (!ifInit) {
+                choose += "0";
+            }
+            /*将选项的文字作为"你"说的话，添加到页面的viewmodel里*/
+            ViewModel.AddChattingItem(1, Choose0Text.Text);
             saveProcess();
-            LastMessage = chattingItemHandle(Choose0.Content.ToString());
+            LastMessage = chattingItemHandle(Choose0Text.Text);
             /*隐藏两个按钮*/
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
@@ -216,10 +288,12 @@ namespace Midnight.UIElement {
         }
 
         private void Choose1_Click(object sender, RoutedEventArgs e) {
-            choose += "1";
-            ViewModel.AddChattingItem(1, Choose1.Content.ToString());
+            if (!ifInit) {
+                choose += "1";
+            }
+            ViewModel.AddChattingItem(1, Choose1Text.Text);
             saveProcess();
-            LastMessage = chattingItemHandle(Choose1.Content.ToString());
+            LastMessage = chattingItemHandle(Choose1Text.Text);
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
             this.DataContext = ViewModel;
@@ -227,14 +301,8 @@ namespace Midnight.UIElement {
             Inputing.Text = "对方正在输入...";
         }
 
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e) {
-            ChattingWindow.Visibility = Visibility.Visible;
-            PersonInfo.Visibility = Visibility.Collapsed;
-            MsgCircle.Visibility = Visibility.Collapsed;
-            NumInfo.Visibility = Visibility.Collapsed;
-        }
-
         private void BackButton_Click(object sender, RoutedEventArgs e) {
+            NewsInfo.Visibility = Visibility.Collapsed;
             ChattingWindow.Visibility = Visibility.Visible;
             PersonInfo.Visibility = Visibility.Collapsed;
             MsgCircle.Visibility = Visibility.Collapsed;
@@ -244,7 +312,6 @@ namespace Midnight.UIElement {
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e) {
             ChattingWindow.Visibility = Visibility.Collapsed;
-
 
             PersonInfo.Visibility = Visibility.Visible;
             UnRead = 0;
@@ -256,6 +323,54 @@ namespace Midnight.UIElement {
             if (PropertyChanged != null) {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (Chatting.IsSelected) {
+                ChattingWindow.Visibility = Visibility.Visible;
+                PersonInfo.Visibility = Visibility.Collapsed;
+                MsgCircle.Visibility = Visibility.Collapsed;
+                NumInfo.Visibility = Visibility.Collapsed;
+                NewsInfo.Visibility = Visibility.Collapsed;
+                UnRead = 0;
+            } else {
+                ChattingWindow.Visibility = Visibility.Collapsed;
+                PersonInfo.Visibility = Visibility.Collapsed;
+                NewsInfo.Visibility = Visibility.Visible;
+                NewsCircle.Visibility = Visibility.Collapsed;
+                NumInfoNews.Visibility = Visibility.Collapsed;
+                UnReadNews = 0;
+            }
+        }
+
+        private void BackButton1_Click(object sender, RoutedEventArgs e) {
+            NewsInfo.Visibility = Visibility.Collapsed;
+            ChattingWindow.Visibility = Visibility.Visible;
+            PersonInfo.Visibility = Visibility.Collapsed;
+            MsgCircle.Visibility = Visibility.Collapsed;
+            NumInfo.Visibility = Visibility.Collapsed;
+        }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e) {
+            if (Chatting.IsSelected) {
+                ChattingWindow.Visibility = Visibility.Visible;
+                PersonInfo.Visibility = Visibility.Collapsed;
+                MsgCircle.Visibility = Visibility.Collapsed;
+                NumInfo.Visibility = Visibility.Collapsed;
+                NewsInfo.Visibility = Visibility.Collapsed;
+                UnRead = 0;
+            } else {
+                ChattingWindow.Visibility = Visibility.Collapsed;
+                PersonInfo.Visibility = Visibility.Collapsed;
+                NewsInfo.Visibility = Visibility.Visible;
+                NewsCircle.Visibility = Visibility.Collapsed;
+                NumInfoNews.Visibility = Visibility.Collapsed;
+                UnReadNews = 0;
+            }
+        }
+
+        private void NewsList_SizeChanged(object sender, SizeChangedEventArgs e) {
+            newsScroll.ChangeView(null, NewsList.ActualHeight, null);
         }
     }
 }

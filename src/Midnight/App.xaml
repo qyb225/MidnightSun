@@ -19,7 +19,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Column="0" Grid.Row="0" CornerRadius="4" Background="#49494A" Padding="13" >
-                    <TextBlock Text="{Binding Msg}" TextWrapping="WrapWholeWords" Foreground="LightGray" FontSize="13" MaxWidth="300"></TextBlock>
+                    <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" Foreground="LightGray" FontSize="13" MaxWidth="400"></TextBlock>
                 </Grid>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="0">
                     <Image Height="35" Width="35" Source="../Assets/IDPage/Test/tx.jpg" Margin="10,0,0,10" VerticalAlignment="Top" />
@@ -38,7 +38,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray" Padding="13">
-                    <TextBlock Text="{Binding Msg}" TextWrapping="WrapWholeWords" FontSize="13"></TextBlock>
+                    <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" FontSize="13" MaxWidth="400"></TextBlock>
                 </Grid>
                 <StackPanel Grid.Column="0" Grid.Row="0" Margin="0">
                     <Image Height="35" Width="35" Source="../Assets/IDPage/Test/logo.jpg" Margin="0,0,10,10" VerticalAlignment="Top" />
