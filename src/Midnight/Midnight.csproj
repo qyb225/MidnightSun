@@ -97,32 +97,31 @@
     </Compile>
     <Compile Include="Database\ChattingInfoDatabase.cs" />
     <Compile Include="Database\MomentDatabase.cs" />
+    <Compile Include="Database\NewsDatabase.cs" />
     <Compile Include="Database\StoryDatabase.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ChattingItems.cs" />
     <Compile Include="Models\MomentModelItems.cs" />
+    <Compile Include="Models\NewsModelItems.cs" />
+    <Compile Include="Process\Process.cs" />
+    <Compile Include="Process\ProcessDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selector\MessageItemDataTemplateSelector.cs" />
     <Compile Include="StoryInfo\StoryItem.cs" />
-    <Compile Include="UIElement\ChattingItem.xaml.cs">
-      <DependentUpon>ChattingItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UIElement\ChattingPage.xaml.cs">
       <DependentUpon>ChattingPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIElement\IDPage.xaml.cs">
-      <DependentUpon>IDPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIElement\Moment.xaml.cs">
-      <DependentUpon>Moment.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIElement\MomentItem.xaml.cs">
       <DependentUpon>MomentItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIElement\NewsItem.xaml.cs">
+      <DependentUpon>NewsItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ChattingViewModels.cs" />
     <Compile Include="ViewModels\MomentViewModes.cs" />
+    <Compile Include="ViewModels\NewsViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -143,6 +142,8 @@
     <Content Include="Assets\IDPage\Test\tx.jpg" />
     <Content Include="Assets\Moment\01.jpg" />
     <Content Include="Assets\Moment\02.jpg" />
+    <Content Include="Assets\Moment\03.png" />
+    <Content Include="Assets\news.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -161,23 +162,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UIElement\ChattingItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UIElement\ChattingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIElement\IDPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIElement\Moment.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UIElement\MomentItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIElement\NewsItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

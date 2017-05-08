@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace Midnight.Database {
-    public static class ChattingInfoDatabase {
-        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "ChattingInfo.db");
+    public static class NewsDatabase {
+        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "News.db");
 
         public static SQLiteConnection GetDbConnection() {
-            // 连接数据库，如果数据库文件不存在则创建一个空数据库。
             var conn = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
-            // 创建 TodoItem 模型对应的表，如果已存在，则忽略该操作。
-            conn.CreateTable<Models.ChattingItems>();
+            conn.CreateTable<Models.NewsModelItems>();
             return conn;
         }
     }
