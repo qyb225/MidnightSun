@@ -13,7 +13,7 @@
         <Image Margin="5" Height="40" Width="40" Source="../Assets/IDPage/Test/logo.jpg"
                VerticalAlignment="Top"/>
         <StackPanel>
-            <TextBlock x:Name="FriendsName" Margin="10" Text="Yokiho" Foreground="Gray"/>
+            <TextBlock x:Name="FriendsName" Margin="10" Text="Christina" Foreground="Gray"/>
             <TextBlock TextWrapping="WrapWholeWords" Margin="10 0 10 10"
                        Text="{x:Bind MomentModelItems.Details}" Foreground="LightGray" />
             <Image Width="200" Height="266" HorizontalAlignment="Left" Source="{x:Bind MomentModelItems.BmpImage}" Stretch="UniformToFill"/>

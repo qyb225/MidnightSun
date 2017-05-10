@@ -9,7 +9,7 @@
     <Application.Resources>
 
         <DataTemplate x:Key="SelfMessageDataTemplate">
-            <Grid HorizontalAlignment="Right"  >
+            <Grid HorizontalAlignment="Right" Margin="5 8 5 8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -28,7 +28,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="MessageDataTemplate">
-            <Grid HorizontalAlignment="Left"  >
+            <Grid HorizontalAlignment="Left" Margin="5 8 5 8" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -45,7 +45,26 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
-
+        <DataTemplate x:Key="OnlineDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="LightGreen"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="OfflineDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="#FF5050"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="SendMomentDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="LightGreen"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="TimeDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="LightGray"/>
+            </Grid>
+        </DataTemplate>
         <selector:MessageItemDataTemplateSelector x:Key="MessageItemDataTemplateSelector"></selector:MessageItemDataTemplateSelector>
     </Application.Resources>
 
