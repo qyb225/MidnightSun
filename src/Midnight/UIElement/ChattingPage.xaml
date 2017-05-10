@@ -42,7 +42,7 @@
                             <StackPanel RelativePanel.AlignRightWithPanel="True" 
                                     RelativePanel.RightOf="Header" RelativePanel.AlignTopWithPanel="True"
                                     RelativePanel.AlignBottomWithPanel="True">
-                                <TextBlock x:Name="NickName" Margin="4 20 10 0" Text="Yokiho" Foreground="LightGray" FontSize="17"/>
+                                <TextBlock x:Name="NickName" Margin="4 20 10 0" Text="Christina" Foreground="LightGray" FontSize="17"/>
                                 <TextBlock x:Name="LastMsg" Margin="4 5 10 10" Text="{x:Bind LastMessage, Mode=TwoWay}" 
                                        HorizontalAlignment="Stretch" FontSize="13" Foreground="Gray"/>
                             </StackPanel>
@@ -91,7 +91,7 @@
                 <TextBlock x:Name="Inputing" Text="" Margin="20,10,0,10" 
                        FontSize="15" Foreground="White" RelativePanel.AlignVerticalCenterWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"/>
-                <TextBlock Foreground="White" Text="Yokiho" RelativePanel.AlignVerticalCenterWithPanel="True"
+                <TextBlock Foreground="White" Text="Christina" RelativePanel.AlignVerticalCenterWithPanel="True"
                        RelativePanel.AlignHorizontalCenterWithPanel="True"
                        Margin="0,10,0,10" FontSize="18"/>
                 <AppBarButton RelativePanel.AlignRightWithPanel="True" Icon="Contact" 
@@ -102,8 +102,8 @@
                 <ListView IsItemClickEnabled="False" x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                            <Setter Property="Margin" Value="5,8,5,8"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
@@ -191,10 +191,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <RelativePanel  Padding="5 8 5 5" Background="#525252" Height="Auto">
-                <Button x:Name="BackButton1" FontFamily="Segoe MDL2 Assets" Click="BackButton1_Click"
-                        FontSize="25" Content="&#xE00E;" Foreground="LightGray"  Background="Transparent" Margin="0 0 10 0"
-                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
-                <TextBlock Text="全部新闻" Foreground="LightGray" RelativePanel.RightOf="BackButton1" RelativePanel.AlignVerticalCenterWithPanel="True" />
+                <TextBlock Text="全部新闻" Foreground="White" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
             </RelativePanel>
             <ScrollViewer x:Name="newsScroll" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10">

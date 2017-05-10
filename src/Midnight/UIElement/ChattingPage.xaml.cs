@@ -93,7 +93,13 @@ namespace Midnight.UIElement {
             if (ViewModel.AllItems.Count == 0) {
                 LastMessage = "";
             } else {
-                LastMessage = chattingItemHandle(ViewModel.AllItems.Last().Msg);
+                LastMessage = "";
+                for (int i = ViewModel.AllItems.Count - 1; i >= 0; --i) {
+                    if (ViewModel.AllItems.ElementAt(i).Sender == 0 || ViewModel.AllItems.ElementAt(i).Sender == 1) {
+                        LastMessage = chattingItemHandle(ViewModel.AllItems.ElementAt(i).Msg);
+                        break;
+                    }
+                }
             }
 
             if (NewsViewModel.AllItems.Count == 0) {
@@ -105,7 +111,7 @@ namespace Midnight.UIElement {
             this.DataContext = ViewModel;
 
             Timer = new DispatcherTimer();
-            Timer.Interval = new TimeSpan(0, 0, 4);
+            Timer.Interval = new TimeSpan(0, 0, 6);
             Timer.Tick += loadMessage;
 
             delayTimer = new DispatcherTimer();
@@ -148,6 +154,7 @@ namespace Midnight.UIElement {
             if (DateTime.Now >= runTime) {
                 Timer.Start();
                 delayTimer.Stop();
+                /*时间显示 or 上线通知  问题：会被初始化*/
             }
         }
 
@@ -169,7 +176,7 @@ namespace Midnight.UIElement {
             } else {
                 UnRead = 0;
             }
-            if (str.Length > 12) {
+            if (str.Length > 11) {
                 str = str.Substring(0, 9);
                 str += "...";
             }
@@ -193,75 +200,102 @@ namespace Midnight.UIElement {
             }
         }
 
-        /*Run every 2 sec*/
+        /*Run every 6 sec*/
         private void loadMessage(object sender, object e) {
-            Inputing.Text = "对方正在输入...";
             if (count >= branchLength) {
                 count = 0;
                 loadABranchStoryData();
                 Inputing.Text = "";
             }
-            /*问题的标志，需要调取下面两个作为回答选项*/
-            else if (aBranch[count].Next == "choose") {
-                saveProcess();
-                ifInit = false;
-                Choose0.Visibility = Visibility.Visible;
-                Choose0Text.Text = aBranch[count++].Msg;
-                Choose1.Visibility = Visibility.Visible;
-                Choose1Text.Text = aBranch[count++].Msg;
-                Inputing.Text = "";
-                Timer.Stop();
-            }
-            /*直接进行*/
-            else if (aBranch[count].Next == "choose0") {
-                saveProcess();
-                ifInit = true;
-                Choose0.Visibility = Visibility.Visible;
-                Choose0Text.Text = aBranch[count++].Msg;
-                Choose1.Visibility = Visibility.Visible;
-                Choose1Text.Text = aBranch[count++].Msg;
-                Inputing.Text = "";
-                Timer.Stop();
-            }
-            /*需要延迟*/
-            else if (aBranch[count].Next == "delay") {
-                Inputing.Text = "";
-                int delayLong = int.Parse(aBranch[count++].Msg);
-                runTime = DateTime.Now.AddMinutes(delayLong);
-                saveProcess();
-                Timer.Stop();
-                delayTimer.Start();
-            }
-            /*新闻*/
-            else if (aBranch[count].Next == "news") {
-                Inputing.Text = "";
-                ++UnReadNews;
-                LastNews = chattingItemHandle(aBranch[count].Msg);
-                NewsViewModel.AddNewsItem(aBranch[count++].Msg);
-                saveProcess();
-            }
-            /*发朋友圈的图片地址*/
-            else if (aBranch[count].Next.Length > 6) {
-                this.MomentViewModels.AddMomentItem(aBranch[count].Msg, aBranch[count].Next);
-                ++count;
-                saveProcess();
-            }
-            /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
-            else if (aBranch[count].Next.Length != 0) {
-                ViewModel.AddChattingItem(0, aBranch[count].Msg);
-                ++UnRead;
-                LastMessage = chattingItemHandle(aBranch[count].Msg);
-                this.DataContext = ViewModel;
-                choose = aBranch[count++].Next;
-                saveProcess();
-            }
-            /*普通消息，直接展示*/
             else {
-                ViewModel.AddChattingItem(0, aBranch[count].Msg);
-                ++UnRead;
-                LastMessage = chattingItemHandle(aBranch[count++].Msg);
-                this.DataContext = ViewModel;
-                saveProcess();
+                if (aBranch[count].Next == "time") {
+                    string timeShow = DateTime.Now.ToString("MM月dd日 HH:mm");
+                    ViewModel.AddChattingItem(5, timeShow);
+                    ++count;
+                    this.DataContext = ViewModel;
+                    saveProcess();
+                }
+                Inputing.Text = "对方正在输入...";
+                if (aBranch[count].Next == "on") {
+                    Inputing.Text = "";
+                    ViewModel.AddChattingItem(2, "对方已上线");
+                    ++count;
+                    this.DataContext = ViewModel;
+                    saveProcess();
+                } else if (aBranch[count].Next == "off") {
+                    Inputing.Text = "";
+                    ViewModel.AddChattingItem(3, "对方已下线");
+                    ++count;
+                    this.DataContext = ViewModel;
+                    saveProcess();
+                }
+                /*问题的标志，需要调取下面两个作为回答选项*/
+                else if (aBranch[count].Next == "choose") {
+                    saveProcess();
+                    ifInit = false;
+                    Choose0.Visibility = Visibility.Visible;
+                    Choose0Text.Text = aBranch[count++].Msg;
+                    Choose1.Visibility = Visibility.Visible;
+                    Choose1Text.Text = aBranch[count++].Msg;
+                    Inputing.Text = "";
+                    Timer.Stop();
+                }
+                /*直接进行*/
+                else if (aBranch[count].Next == "choose0") {
+                    saveProcess();
+                    ifInit = true;
+                    Choose0.Visibility = Visibility.Visible;
+                    Choose0Text.Text = aBranch[count++].Msg;
+                    Choose1.Visibility = Visibility.Visible;
+                    Choose1Text.Text = aBranch[count++].Msg;
+                    Inputing.Text = "";
+                    Timer.Stop();
+                }
+                /*需要延迟*/
+                else if (aBranch[count].Next == "delay") {
+                    Inputing.Text = "";
+                    int delayLong = int.Parse(aBranch[count++].Msg);
+                    runTime = DateTime.Now.AddMinutes(delayLong);
+                    saveProcess();
+                    Timer.Stop();
+                    delayTimer.Start();
+                }
+                /*新闻*/
+                else if (aBranch[count].Next == "news") {
+                    Inputing.Text = "";
+                    ++UnReadNews;
+                    LastNews = chattingItemHandle(aBranch[count].Msg);
+                    NewsViewModel.AddNewsItem(aBranch[count++].Msg);
+                    saveProcess();
+                }
+                /*发朋友圈的图片地址*/
+                else if (aBranch[count].Next.Length > 6) {
+                    this.MomentViewModels.AddMomentItem(aBranch[count].Msg, aBranch[count].Next);
+                    ViewModel.AddChattingItem(4, "朋友圈已更新");
+                    this.DataContext = ViewModel;
+                    ++count;
+                    saveProcess();
+                }
+                /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
+                else if (aBranch[count].Next.Length != 0) {
+                    ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ++UnRead;
+                    LastMessage = chattingItemHandle(aBranch[count].Msg);
+                    this.DataContext = ViewModel;
+                    choose = aBranch[count++].Next;
+                    saveProcess();
+                }
+                /*普通消息，直接展示*/
+                else {
+                    ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ++UnRead;
+                    LastMessage = chattingItemHandle(aBranch[count++].Msg);
+                    this.DataContext = ViewModel;
+                    saveProcess();
+                }
+            }
+            if (runTime < DateTime.Now) {
+                runTime = DateTime.Now;
             }
         }
 
@@ -341,14 +375,6 @@ namespace Midnight.UIElement {
                 NumInfoNews.Visibility = Visibility.Collapsed;
                 UnReadNews = 0;
             }
-        }
-
-        private void BackButton1_Click(object sender, RoutedEventArgs e) {
-            NewsInfo.Visibility = Visibility.Collapsed;
-            ChattingWindow.Visibility = Visibility.Visible;
-            PersonInfo.Visibility = Visibility.Collapsed;
-            MsgCircle.Visibility = Visibility.Collapsed;
-            NumInfo.Visibility = Visibility.Collapsed;
         }
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e) {
