@@ -10,7 +10,7 @@
     <RelativePanel>
         <TextBlock Text="游戏失败，提建议请谨慎" Foreground="White" Margin="0 50 0 50"
                    RelativePanel.AlignHorizontalCenterWithPanel="True" FontSize="36"/>
-        <Button x:Name="Again" Padding="20" Content="重新开始" RelativePanel.AlignHorizontalCenterWithPanel="True" Click="Again_Click"
+        <Button x:Name="Again" Padding="20 10 20 10" Content="重新开始" RelativePanel.AlignHorizontalCenterWithPanel="True" Click="Again_Click"
                 RelativePanel.AlignBottomWithPanel="True" Foreground="LightGray" FontSize="28" Margin="0 20 0 100"/>
     </RelativePanel>
 </Page>
