@@ -22,12 +22,6 @@ namespace Midnight.UIElement {
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
 
-    /*
-     * 一些坑：
-     * 1. 需要数据库不停记录choose(故事线) 和 count
-     * 2. 一切的消息收发都在该页面内进行，也就是说，如果离开了该页面（去看朋友圈），则消息收发无法进行，与现实不符，要推翻目前写法。
-     */
-
     public sealed partial class ChattingPage : Page, INotifyPropertyChanged {
         private string choose; //s
         private int count; //s
@@ -111,7 +105,7 @@ namespace Midnight.UIElement {
             this.DataContext = ViewModel;
 
             Timer = new DispatcherTimer();
-            Timer.Interval = new TimeSpan(0, 0, 6);
+            Timer.Interval = new TimeSpan(0, 0, 7);
             Timer.Tick += loadMessage;
 
             delayTimer = new DispatcherTimer();
@@ -127,10 +121,17 @@ namespace Midnight.UIElement {
         private void loadProgress() {
             using (var conn = Process.ProcessDatabase.GetDbConnection()) {
                 var processInfo = conn.Table<Process.Process>();
-                var last = processInfo.Last();
-                choose = last.Choose;
-                count = last.Count;
-                runTime = new DateTime(last.Year, last.Month, last.Day, last.Hour, last.Min, last.Sec);
+                if (processInfo.Count() > 0) {
+                    var last = processInfo.Last();
+                    choose = last.Choose;
+                    count = last.Count;
+                    runTime = new DateTime(last.Year, last.Month, last.Day, last.Hour, last.Min, last.Sec);
+                } else {
+                    choose = "X1";
+                    count = 0;
+                    runTime = new DateTime(1000, 1, 1, 0, 0, 0);
+                }
+                
             }
         }
 

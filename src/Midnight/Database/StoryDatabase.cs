@@ -13,7 +13,7 @@ namespace Midnight.Database {
         public static string DbPath { set; get; }
 
         public static SQLiteConnection GetDbConnection(string data) {
-            DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, data);
+            DbPath = Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, data);
             var conn = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
             conn.CreateTable<StoryInfo.StoryItem>();
             return conn;
