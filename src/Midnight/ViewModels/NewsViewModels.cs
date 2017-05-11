@@ -47,6 +47,16 @@ namespace Midnight.ViewModels {
             NotifyPropertyChanged();
         }
 
+        public void Clear() {
+            this.allItems.Clear();
+            using (var conn = Database.NewsDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.NewsModelItems>();
+                foreach (var item in Database) {
+                    conn.Delete(item);
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") {

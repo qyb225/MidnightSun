@@ -29,6 +29,7 @@ namespace Midnight
         public App()
         {
             this.InitializeComponent();
+            var init = new Init.Init();
             this.Suspending += OnSuspending;
         }
 

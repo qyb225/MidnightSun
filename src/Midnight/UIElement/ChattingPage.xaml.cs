@@ -31,7 +31,7 @@ namespace Midnight.UIElement {
         private DateTime runTime; //s
         private DispatcherTimer delayTimer;
         private bool ifInit = true;
-        public ViewModels.ChattingViewModels ViewModel { set; get; }
+        public ViewModels.ChattingViewModels ChattingViewModel { set; get; }
         public ViewModels.MomentViewModes MomentViewModels { get; set; }
         public ViewModels.NewsViewModels NewsViewModel { set; get; }
 
@@ -81,16 +81,16 @@ namespace Midnight.UIElement {
 
         public ChattingPage() {
             this.InitializeComponent();
-            ViewModel = new ViewModels.ChattingViewModels();
+            ChattingViewModel = new ViewModels.ChattingViewModels();
             this.MomentViewModels = new ViewModels.MomentViewModes();
             NewsViewModel = new ViewModels.NewsViewModels();
-            if (ViewModel.AllItems.Count == 0) {
+            if (ChattingViewModel.AllItems.Count == 0) {
                 LastMessage = "";
             } else {
                 LastMessage = "";
-                for (int i = ViewModel.AllItems.Count - 1; i >= 0; --i) {
-                    if (ViewModel.AllItems.ElementAt(i).Sender == 0 || ViewModel.AllItems.ElementAt(i).Sender == 1) {
-                        LastMessage = chattingItemHandle(ViewModel.AllItems.ElementAt(i).Msg);
+                for (int i = ChattingViewModel.AllItems.Count - 1; i >= 0; --i) {
+                    if (ChattingViewModel.AllItems.ElementAt(i).Sender == 0 || ChattingViewModel.AllItems.ElementAt(i).Sender == 1) {
+                        LastMessage = chattingItemHandle(ChattingViewModel.AllItems.ElementAt(i).Msg);
                         break;
                     }
                 }
@@ -102,7 +102,7 @@ namespace Midnight.UIElement {
                 LastNews = chattingItemHandle(NewsViewModel.AllItems.Last().Details);
             }
 
-            this.DataContext = ViewModel;
+            this.DataContext = ChattingViewModel;
 
             Timer = new DispatcherTimer();
             Timer.Interval = new TimeSpan(0, 0, 7);
@@ -211,23 +211,23 @@ namespace Midnight.UIElement {
             else {
                 if (aBranch[count].Next == "time") {
                     string timeShow = DateTime.Now.ToString("MM月dd日 HH:mm");
-                    ViewModel.AddChattingItem(5, timeShow);
+                    ChattingViewModel.AddChattingItem(5, timeShow);
                     ++count;
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 }
                 Inputing.Text = "对方正在输入...";
                 if (aBranch[count].Next == "on") {
                     Inputing.Text = "";
-                    ViewModel.AddChattingItem(2, "对方已上线");
+                    ChattingViewModel.AddChattingItem(2, "对方已上线");
                     ++count;
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 } else if (aBranch[count].Next == "off") {
                     Inputing.Text = "";
-                    ViewModel.AddChattingItem(3, "对方已下线");
+                    ChattingViewModel.AddChattingItem(3, "对方已下线");
                     ++count;
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 }
                 /*问题的标志，需要调取下面两个作为回答选项*/
@@ -269,29 +269,45 @@ namespace Midnight.UIElement {
                     NewsViewModel.AddNewsItem(aBranch[count++].Msg);
                     saveProcess();
                 }
+                /*Bad end*/
+                else if (aBranch[count].Next == "die") {
+                    choose = "X1";
+                    count = 0;
+                    using (var conn = Process.ProcessDatabase.GetDbConnection()) {
+                        var processInfo = conn.Table<Process.Process>();
+                        foreach (var item in processInfo) {
+                            conn.Delete(item);
+                        }
+                    }
+                    this.ChattingViewModel.Clear();
+                    this.NewsViewModel.Clear();
+                    this.MomentViewModels.Clear();
+                    Timer.Stop();
+                    this.Frame.Navigate(typeof(BadEnd));
+                }
                 /*发朋友圈的图片地址*/
                 else if (aBranch[count].Next.Length > 6) {
                     this.MomentViewModels.AddMomentItem(aBranch[count].Msg, aBranch[count].Next);
-                    ViewModel.AddChattingItem(4, "朋友圈已更新");
-                    this.DataContext = ViewModel;
+                    ChattingViewModel.AddChattingItem(4, "朋友圈已更新");
+                    this.DataContext = ChattingViewModel;
                     ++count;
                     saveProcess();
                 }
                 /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
                 else if (aBranch[count].Next.Length != 0) {
-                    ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg);
                     ++UnRead;
                     LastMessage = chattingItemHandle(aBranch[count].Msg);
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     choose = aBranch[count++].Next;
                     saveProcess();
                 }
                 /*普通消息，直接展示*/
                 else {
-                    ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg);
                     ++UnRead;
                     LastMessage = chattingItemHandle(aBranch[count++].Msg);
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 }
             }
@@ -310,14 +326,14 @@ namespace Midnight.UIElement {
                 choose += "0";
             }
             /*将选项的文字作为"你"说的话，添加到页面的viewmodel里*/
-            ViewModel.AddChattingItem(1, Choose0Text.Text);
+            ChattingViewModel.AddChattingItem(1, Choose0Text.Text);
             saveProcess();
             LastMessage = chattingItemHandle(Choose0Text.Text);
             /*隐藏两个按钮*/
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
             /*更新dataContext*/
-            this.DataContext = ViewModel;
+            this.DataContext = ChattingViewModel;
             Timer.Start();
             Inputing.Text = "对方正在输入...";
         }
@@ -326,12 +342,12 @@ namespace Midnight.UIElement {
             if (!ifInit) {
                 choose += "1";
             }
-            ViewModel.AddChattingItem(1, Choose1Text.Text);
+            ChattingViewModel.AddChattingItem(1, Choose1Text.Text);
             saveProcess();
             LastMessage = chattingItemHandle(Choose1Text.Text);
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
-            this.DataContext = ViewModel;
+            this.DataContext = ChattingViewModel;
             Timer.Start();
             Inputing.Text = "对方正在输入...";
         }

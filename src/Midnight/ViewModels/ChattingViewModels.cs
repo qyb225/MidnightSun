@@ -54,6 +54,17 @@ namespace Midnight.ViewModels {
             NotifyPropertyChanged();
         }
 
+        public void Clear() {
+            this.allItems.Clear();
+            using (var conn = ChattingInfoDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.ChattingItems>();
+                foreach (var item in Database) {
+                    conn.Delete(item);
+                }
+            }
+            NotifyPropertyChanged();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Midnight.Database {
     public static class StoryDatabase {
@@ -14,6 +15,7 @@ namespace Midnight.Database {
 
         public static SQLiteConnection GetDbConnection(string data) {
             DbPath = Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, data);
+            
             var conn = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
             conn.CreateTable<StoryInfo.StoryItem>();
             return conn;

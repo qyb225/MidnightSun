@@ -49,6 +49,16 @@ namespace Midnight.ViewModels {
             NotifyPropertyChanged();
         }
 
+        public void Clear() {
+            this.allItems.Clear();
+            using (var conn = MomentDatabase.GetDbConnection()) {
+                var Database = conn.Table<Models.MomentModelItems>();
+                foreach (var item in Database) {
+                    conn.Delete(item);
+                }
+            }
+        }
+
         public void AddMomentItem(string detail, string img) {
             Models.MomentModelItems theNew = new Models.MomentModelItems() { Details = detail,
                 Image = img,
