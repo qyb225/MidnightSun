@@ -22,7 +22,7 @@
                     <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" Foreground="LightGray" FontSize="13" MaxWidth="400"></TextBlock>
                 </Grid>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="0">
-                    <Image Height="35" Width="35" Source="../Assets/IDPage/Test/tx.jpg" Margin="10,0,0,10" VerticalAlignment="Top" />
+                    <Image Height="35" Width="35" Source="{Binding NickImage}" Stretch="Fill" Margin="10,0,0,10" VerticalAlignment="Top" />
                 </StackPanel>
             </Grid>
         </DataTemplate>

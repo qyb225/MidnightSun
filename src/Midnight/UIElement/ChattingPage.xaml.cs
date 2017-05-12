@@ -5,14 +5,20 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -23,17 +29,19 @@ namespace Midnight.UIElement {
     /// </summary>
 
     public sealed partial class ChattingPage : Page, INotifyPropertyChanged {
-        private string choose; //s
-        private int count; //s
+        private string choose;
+        private int count;
         private int branchLength;
         private DispatcherTimer Timer;
         private StoryInfo.StoryItem[] aBranch;
-        private DateTime runTime; //s
+        private DateTime runTime;
         private DispatcherTimer delayTimer;
+        private double speedUp = 1.0;
         private bool ifInit = true;
         public ViewModels.ChattingViewModels ChattingViewModel { set; get; }
         public ViewModels.MomentViewModes MomentViewModels { get; set; }
         public ViewModels.NewsViewModels NewsViewModel { set; get; }
+        private string pageNickNamePath;
 
         private string lastMsg;
         public string LastMessage {
@@ -84,6 +92,7 @@ namespace Midnight.UIElement {
             ChattingViewModel = new ViewModels.ChattingViewModels();
             this.MomentViewModels = new ViewModels.MomentViewModes();
             NewsViewModel = new ViewModels.NewsViewModels();
+            pageNickNamePath = "ms-appx://Midnight/Assets/IDPage/Test/tx.jpg";
             if (ChattingViewModel.AllItems.Count == 0) {
                 LastMessage = "";
             } else {
@@ -91,10 +100,12 @@ namespace Midnight.UIElement {
                 for (int i = ChattingViewModel.AllItems.Count - 1; i >= 0; --i) {
                     if (ChattingViewModel.AllItems.ElementAt(i).Sender == 0 || ChattingViewModel.AllItems.ElementAt(i).Sender == 1) {
                         LastMessage = chattingItemHandle(ChattingViewModel.AllItems.ElementAt(i).Msg);
+                        pageNickNamePath = ChattingViewModel.AllItems.ElementAt(i).NickPath;
                         break;
                     }
                 }
             }
+            NickPic.Source = new BitmapImage(new Uri(pageNickNamePath));
 
             if (NewsViewModel.AllItems.Count == 0) {
                 LastNews = "";
@@ -103,6 +114,7 @@ namespace Midnight.UIElement {
             }
 
             this.DataContext = ChattingViewModel;
+            this.speedUp = 1.0;
 
             Timer = new DispatcherTimer();
             Timer.Interval = new TimeSpan(0, 0, 7);
@@ -211,7 +223,7 @@ namespace Midnight.UIElement {
             else {
                 if (aBranch[count].Next == "time") {
                     string timeShow = DateTime.Now.ToString("MM月dd日 HH:mm");
-                    ChattingViewModel.AddChattingItem(5, timeShow);
+                    ChattingViewModel.AddChattingItem(5, timeShow, pageNickNamePath);
                     ++count;
                     this.DataContext = ChattingViewModel;
                     saveProcess();
@@ -219,13 +231,13 @@ namespace Midnight.UIElement {
                 Inputing.Text = "对方正在输入...";
                 if (aBranch[count].Next == "on") {
                     Inputing.Text = "";
-                    ChattingViewModel.AddChattingItem(2, "对方已上线");
+                    ChattingViewModel.AddChattingItem(2, "对方已上线", pageNickNamePath);
                     ++count;
                     this.DataContext = ChattingViewModel;
                     saveProcess();
                 } else if (aBranch[count].Next == "off") {
                     Inputing.Text = "";
-                    ChattingViewModel.AddChattingItem(3, "对方已下线");
+                    ChattingViewModel.AddChattingItem(3, "对方已下线", pageNickNamePath);
                     ++count;
                     this.DataContext = ChattingViewModel;
                     saveProcess();
@@ -255,7 +267,7 @@ namespace Midnight.UIElement {
                 /*需要延迟*/
                 else if (aBranch[count].Next == "delay") {
                     Inputing.Text = "";
-                    int delayLong = int.Parse(aBranch[count++].Msg);
+                    int delayLong = (int) (speedUp * int.Parse(aBranch[count++].Msg));
                     runTime = DateTime.Now.AddMinutes(delayLong);
                     saveProcess();
                     Timer.Stop();
@@ -288,14 +300,14 @@ namespace Midnight.UIElement {
                 /*发朋友圈的图片地址*/
                 else if (aBranch[count].Next.Length > 6) {
                     this.MomentViewModels.AddMomentItem(aBranch[count].Msg, aBranch[count].Next);
-                    ChattingViewModel.AddChattingItem(4, "朋友圈已更新");
+                    ChattingViewModel.AddChattingItem(4, "朋友圈已更新", pageNickNamePath);
                     this.DataContext = ChattingViewModel;
                     ++count;
                     saveProcess();
                 }
                 /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
                 else if (aBranch[count].Next.Length != 0) {
-                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg, pageNickNamePath);
                     ++UnRead;
                     LastMessage = chattingItemHandle(aBranch[count].Msg);
                     this.DataContext = ChattingViewModel;
@@ -304,7 +316,7 @@ namespace Midnight.UIElement {
                 }
                 /*普通消息，直接展示*/
                 else {
-                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg, pageNickNamePath);
                     ++UnRead;
                     LastMessage = chattingItemHandle(aBranch[count++].Msg);
                     this.DataContext = ChattingViewModel;
@@ -326,7 +338,7 @@ namespace Midnight.UIElement {
                 choose += "0";
             }
             /*将选项的文字作为"你"说的话，添加到页面的viewmodel里*/
-            ChattingViewModel.AddChattingItem(1, Choose0Text.Text);
+            ChattingViewModel.AddChattingItem(1, Choose0Text.Text, pageNickNamePath);
             saveProcess();
             LastMessage = chattingItemHandle(Choose0Text.Text);
             /*隐藏两个按钮*/
@@ -342,7 +354,7 @@ namespace Midnight.UIElement {
             if (!ifInit) {
                 choose += "1";
             }
-            ChattingViewModel.AddChattingItem(1, Choose1Text.Text);
+            ChattingViewModel.AddChattingItem(1, Choose1Text.Text, pageNickNamePath);
             saveProcess();
             LastMessage = chattingItemHandle(Choose1Text.Text);
             Choose0.Visibility = Visibility.Collapsed;
@@ -414,6 +426,68 @@ namespace Midnight.UIElement {
 
         private void NewsList_SizeChanged(object sender, SizeChangedEventArgs e) {
             newsScroll.ChangeView(null, NewsList.ActualHeight, null);
+        }
+
+        private void Speed_Toggled(object sender, RoutedEventArgs e) {
+            if (Speed.IsOn) {
+                speedUp = 0.3;
+            } else {
+                speedUp = 1.0;
+            }
+        }
+
+        private static async Task SaveWriteableBitmapImageFile(WriteableBitmap image, StorageFile file) {
+            //BitmapEncoder 存放格式
+            Guid bitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+            string filename = file.Name;
+            if (filename.EndsWith("jpg")) {
+                bitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+            } else if (filename.EndsWith("png")) {
+                bitmapEncoderGuid = BitmapEncoder.PngEncoderId;
+            }
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite, StorageOpenOptions.None)) {
+                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(bitmapEncoderGuid, stream);
+                Stream pixelStream = image.PixelBuffer.AsStream();
+                byte[] pixels = new byte[pixelStream.Length];
+                await pixelStream.ReadAsync(pixels, 0, pixels.Length);
+
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore,
+                          (uint)image.PixelWidth, (uint)image.PixelHeight, 96.0, 96.0, pixels);
+                await encoder.FlushAsync();
+            }
+        }
+
+        private async void NickNameBtn_Click(object sender, RoutedEventArgs e) {
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".png");
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null) {
+                IRandomAccessStream readStream = await file.OpenAsync(FileAccessMode.Read);
+
+
+                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(readStream);
+                WriteableBitmap writeableImage = new WriteableBitmap((int)decoder.PixelWidth, (int)decoder.PixelHeight);
+                writeableImage.SetSource(readStream);
+
+                StorageFolder folder;
+                folder = ApplicationData.Current.LocalFolder;
+
+                string fileName = DateTimeOffset.UtcNow.ToString();
+                fileName = fileName.Replace(":", "").Replace("/", "").Replace("+", "").Replace(" ", "");
+
+                StorageFile saving = await folder.CreateFileAsync(fileName + file.FileType.ToString(), CreationCollisionOption.ReplaceExisting);
+                await SaveWriteableBitmapImageFile(writeableImage, saving);
+
+                pageNickNamePath = "ms-appdata:///local/" + fileName + file.FileType.ToString();
+                BitmapImage bitMap = new BitmapImage(new Uri(pageNickNamePath));
+                NickPic.Source = bitMap;
+                ChattingViewModel.UpdateNick(pageNickNamePath);
+                this.DataContext = ChattingViewModel;
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Midnight
         public MainPage()
         {
             this.InitializeComponent();
-            this.ChattingFrame.Navigate(typeof(ChattingPage));
+            this.GameFram.Navigate(typeof(ChattingPage));
         }
     }
 }
