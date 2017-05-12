@@ -121,6 +121,7 @@
     <Compile Include="UIElement\ChattingPage.xaml.cs">
       <DependentUpon>ChattingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIElement\GetRandom.cs" />
     <Compile Include="UIElement\MomentItem.xaml.cs">
       <DependentUpon>MomentItem.xaml</DependentUpon>
     </Compile>
