@@ -17,6 +17,10 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Midnight_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxPackageDir>C:\Users\The Dark Knight\Desktop\Midnight\</AppxPackageDir>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -99,6 +103,7 @@
     <Compile Include="Database\MomentDatabase.cs" />
     <Compile Include="Database\NewsDatabase.cs" />
     <Compile Include="Database\StoryDatabase.cs" />
+    <Compile Include="Init\Init.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -110,6 +115,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selector\MessageItemDataTemplateSelector.cs" />
     <Compile Include="StoryInfo\StoryItem.cs" />
+    <Compile Include="UIElement\BadEnd.xaml.cs">
+      <DependentUpon>BadEnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIElement\ChattingPage.xaml.cs">
       <DependentUpon>ChattingPage.xaml</DependentUpon>
     </Compile>
@@ -144,6 +152,21 @@
     <Content Include="Assets\Moment\02.jpg" />
     <Content Include="Assets\Moment\03.png" />
     <Content Include="Assets\news.jpg" />
+    <Content Include="Assets\Story\X1.txt" />
+    <Content Include="Assets\Story\X10.txt" />
+    <Content Include="Assets\Story\X11.txt" />
+    <Content Include="Assets\Story\X110.txt" />
+    <Content Include="Assets\Story\X111.txt" />
+    <Content Include="Assets\Story\X2.txt" />
+    <Content Include="Assets\Story\X20.txt" />
+    <Content Include="Assets\Story\X21.txt" />
+    <Content Include="Assets\Story\X3.txt" />
+    <Content Include="Assets\Story\X4.txt" />
+    <Content Include="Assets\Story\X40.txt" />
+    <Content Include="Assets\Story\X400.txt" />
+    <Content Include="Assets\Story\X401.txt" />
+    <Content Include="Assets\Story\X41.txt" />
+    <Content Include="Assets\Story\X5.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -161,6 +184,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIElement\BadEnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIElement\ChattingPage.xaml">
       <SubType>Designer</SubType>

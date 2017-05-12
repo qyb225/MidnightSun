@@ -5,14 +5,20 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -22,24 +28,20 @@ namespace Midnight.UIElement {
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
 
-    /*
-     * 一些坑：
-     * 1. 需要数据库不停记录choose(故事线) 和 count
-     * 2. 一切的消息收发都在该页面内进行，也就是说，如果离开了该页面（去看朋友圈），则消息收发无法进行，与现实不符，要推翻目前写法。
-     */
-
     public sealed partial class ChattingPage : Page, INotifyPropertyChanged {
-        private string choose; //s
-        private int count; //s
+        private string choose;
+        private int count;
         private int branchLength;
         private DispatcherTimer Timer;
         private StoryInfo.StoryItem[] aBranch;
-        private DateTime runTime; //s
+        private DateTime runTime;
         private DispatcherTimer delayTimer;
+        private double speedUp = 1.0;
         private bool ifInit = true;
-        public ViewModels.ChattingViewModels ViewModel { set; get; }
+        public ViewModels.ChattingViewModels ChattingViewModel { set; get; }
         public ViewModels.MomentViewModes MomentViewModels { get; set; }
         public ViewModels.NewsViewModels NewsViewModel { set; get; }
+        private string pageNickNamePath;
 
         private string lastMsg;
         public string LastMessage {
@@ -87,20 +89,23 @@ namespace Midnight.UIElement {
 
         public ChattingPage() {
             this.InitializeComponent();
-            ViewModel = new ViewModels.ChattingViewModels();
+            ChattingViewModel = new ViewModels.ChattingViewModels();
             this.MomentViewModels = new ViewModels.MomentViewModes();
             NewsViewModel = new ViewModels.NewsViewModels();
-            if (ViewModel.AllItems.Count == 0) {
+            pageNickNamePath = "ms-appx://Midnight/Assets/IDPage/Test/tx.jpg";
+            if (ChattingViewModel.AllItems.Count == 0) {
                 LastMessage = "";
             } else {
                 LastMessage = "";
-                for (int i = ViewModel.AllItems.Count - 1; i >= 0; --i) {
-                    if (ViewModel.AllItems.ElementAt(i).Sender == 0 || ViewModel.AllItems.ElementAt(i).Sender == 1) {
-                        LastMessage = chattingItemHandle(ViewModel.AllItems.ElementAt(i).Msg);
+                for (int i = ChattingViewModel.AllItems.Count - 1; i >= 0; --i) {
+                    if (ChattingViewModel.AllItems.ElementAt(i).Sender == 0 || ChattingViewModel.AllItems.ElementAt(i).Sender == 1) {
+                        LastMessage = chattingItemHandle(ChattingViewModel.AllItems.ElementAt(i).Msg);
+                        pageNickNamePath = ChattingViewModel.AllItems.ElementAt(i).NickPath;
                         break;
                     }
                 }
             }
+            NickPic.Source = new BitmapImage(new Uri(pageNickNamePath));
 
             if (NewsViewModel.AllItems.Count == 0) {
                 LastNews = "";
@@ -108,10 +113,11 @@ namespace Midnight.UIElement {
                 LastNews = chattingItemHandle(NewsViewModel.AllItems.Last().Details);
             }
 
-            this.DataContext = ViewModel;
+            this.DataContext = ChattingViewModel;
+            this.speedUp = 1.0;
 
             Timer = new DispatcherTimer();
-            Timer.Interval = new TimeSpan(0, 0, 6);
+            Timer.Interval = new TimeSpan(0, 0, 7);
             Timer.Tick += loadMessage;
 
             delayTimer = new DispatcherTimer();
@@ -127,10 +133,17 @@ namespace Midnight.UIElement {
         private void loadProgress() {
             using (var conn = Process.ProcessDatabase.GetDbConnection()) {
                 var processInfo = conn.Table<Process.Process>();
-                var last = processInfo.Last();
-                choose = last.Choose;
-                count = last.Count;
-                runTime = new DateTime(last.Year, last.Month, last.Day, last.Hour, last.Min, last.Sec);
+                if (processInfo.Count() > 0) {
+                    var last = processInfo.Last();
+                    choose = last.Choose;
+                    count = last.Count;
+                    runTime = new DateTime(last.Year, last.Month, last.Day, last.Hour, last.Min, last.Sec);
+                } else {
+                    choose = "X1";
+                    count = 0;
+                    runTime = new DateTime(1000, 1, 1, 0, 0, 0);
+                }
+                
             }
         }
 
@@ -210,23 +223,23 @@ namespace Midnight.UIElement {
             else {
                 if (aBranch[count].Next == "time") {
                     string timeShow = DateTime.Now.ToString("MM月dd日 HH:mm");
-                    ViewModel.AddChattingItem(5, timeShow);
+                    ChattingViewModel.AddChattingItem(5, timeShow, pageNickNamePath);
                     ++count;
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 }
                 Inputing.Text = "对方正在输入...";
                 if (aBranch[count].Next == "on") {
                     Inputing.Text = "";
-                    ViewModel.AddChattingItem(2, "对方已上线");
+                    ChattingViewModel.AddChattingItem(2, "对方已上线", pageNickNamePath);
                     ++count;
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 } else if (aBranch[count].Next == "off") {
                     Inputing.Text = "";
-                    ViewModel.AddChattingItem(3, "对方已下线");
+                    ChattingViewModel.AddChattingItem(3, "对方已下线", pageNickNamePath);
                     ++count;
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 }
                 /*问题的标志，需要调取下面两个作为回答选项*/
@@ -254,7 +267,7 @@ namespace Midnight.UIElement {
                 /*需要延迟*/
                 else if (aBranch[count].Next == "delay") {
                     Inputing.Text = "";
-                    int delayLong = int.Parse(aBranch[count++].Msg);
+                    int delayLong = (int) (speedUp * int.Parse(aBranch[count++].Msg));
                     runTime = DateTime.Now.AddMinutes(delayLong);
                     saveProcess();
                     Timer.Stop();
@@ -268,29 +281,45 @@ namespace Midnight.UIElement {
                     NewsViewModel.AddNewsItem(aBranch[count++].Msg);
                     saveProcess();
                 }
+                /*Bad end*/
+                else if (aBranch[count].Next == "die") {
+                    choose = "X1";
+                    count = 0;
+                    using (var conn = Process.ProcessDatabase.GetDbConnection()) {
+                        var processInfo = conn.Table<Process.Process>();
+                        foreach (var item in processInfo) {
+                            conn.Delete(item);
+                        }
+                    }
+                    this.ChattingViewModel.Clear();
+                    this.NewsViewModel.Clear();
+                    this.MomentViewModels.Clear();
+                    Timer.Stop();
+                    this.Frame.Navigate(typeof(BadEnd));
+                }
                 /*发朋友圈的图片地址*/
                 else if (aBranch[count].Next.Length > 6) {
                     this.MomentViewModels.AddMomentItem(aBranch[count].Msg, aBranch[count].Next);
-                    ViewModel.AddChattingItem(4, "朋友圈已更新");
-                    this.DataContext = ViewModel;
+                    ChattingViewModel.AddChattingItem(4, "朋友圈已更新", pageNickNamePath);
+                    this.DataContext = ChattingViewModel;
                     ++count;
                     saveProcess();
                 }
                 /*不是choose，只可能是跳转database的标志，赋值choose为next即可*/
                 else if (aBranch[count].Next.Length != 0) {
-                    ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg, pageNickNamePath);
                     ++UnRead;
                     LastMessage = chattingItemHandle(aBranch[count].Msg);
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     choose = aBranch[count++].Next;
                     saveProcess();
                 }
                 /*普通消息，直接展示*/
                 else {
-                    ViewModel.AddChattingItem(0, aBranch[count].Msg);
+                    ChattingViewModel.AddChattingItem(0, aBranch[count].Msg, pageNickNamePath);
                     ++UnRead;
                     LastMessage = chattingItemHandle(aBranch[count++].Msg);
-                    this.DataContext = ViewModel;
+                    this.DataContext = ChattingViewModel;
                     saveProcess();
                 }
             }
@@ -309,14 +338,14 @@ namespace Midnight.UIElement {
                 choose += "0";
             }
             /*将选项的文字作为"你"说的话，添加到页面的viewmodel里*/
-            ViewModel.AddChattingItem(1, Choose0Text.Text);
+            ChattingViewModel.AddChattingItem(1, Choose0Text.Text, pageNickNamePath);
             saveProcess();
             LastMessage = chattingItemHandle(Choose0Text.Text);
             /*隐藏两个按钮*/
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
             /*更新dataContext*/
-            this.DataContext = ViewModel;
+            this.DataContext = ChattingViewModel;
             Timer.Start();
             Inputing.Text = "对方正在输入...";
         }
@@ -325,12 +354,12 @@ namespace Midnight.UIElement {
             if (!ifInit) {
                 choose += "1";
             }
-            ViewModel.AddChattingItem(1, Choose1Text.Text);
+            ChattingViewModel.AddChattingItem(1, Choose1Text.Text, pageNickNamePath);
             saveProcess();
             LastMessage = chattingItemHandle(Choose1Text.Text);
             Choose0.Visibility = Visibility.Collapsed;
             Choose1.Visibility = Visibility.Collapsed;
-            this.DataContext = ViewModel;
+            this.DataContext = ChattingViewModel;
             Timer.Start();
             Inputing.Text = "对方正在输入...";
         }
@@ -397,6 +426,68 @@ namespace Midnight.UIElement {
 
         private void NewsList_SizeChanged(object sender, SizeChangedEventArgs e) {
             newsScroll.ChangeView(null, NewsList.ActualHeight, null);
+        }
+
+        private void Speed_Toggled(object sender, RoutedEventArgs e) {
+            if (Speed.IsOn) {
+                speedUp = 0.3;
+            } else {
+                speedUp = 1.0;
+            }
+        }
+
+        private static async Task SaveWriteableBitmapImageFile(WriteableBitmap image, StorageFile file) {
+            //BitmapEncoder 存放格式
+            Guid bitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+            string filename = file.Name;
+            if (filename.EndsWith("jpg")) {
+                bitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+            } else if (filename.EndsWith("png")) {
+                bitmapEncoderGuid = BitmapEncoder.PngEncoderId;
+            }
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite, StorageOpenOptions.None)) {
+                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(bitmapEncoderGuid, stream);
+                Stream pixelStream = image.PixelBuffer.AsStream();
+                byte[] pixels = new byte[pixelStream.Length];
+                await pixelStream.ReadAsync(pixels, 0, pixels.Length);
+
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore,
+                          (uint)image.PixelWidth, (uint)image.PixelHeight, 96.0, 96.0, pixels);
+                await encoder.FlushAsync();
+            }
+        }
+
+        private async void NickNameBtn_Click(object sender, RoutedEventArgs e) {
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".png");
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null) {
+                IRandomAccessStream readStream = await file.OpenAsync(FileAccessMode.Read);
+
+
+                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(readStream);
+                WriteableBitmap writeableImage = new WriteableBitmap((int)decoder.PixelWidth, (int)decoder.PixelHeight);
+                writeableImage.SetSource(readStream);
+
+                StorageFolder folder;
+                folder = ApplicationData.Current.LocalFolder;
+
+                string fileName = DateTimeOffset.UtcNow.ToString();
+                fileName = fileName.Replace(":", "").Replace("/", "").Replace("+", "").Replace(" ", "");
+
+                StorageFile saving = await folder.CreateFileAsync(fileName + file.FileType.ToString(), CreationCollisionOption.ReplaceExisting);
+                await SaveWriteableBitmapImageFile(writeableImage, saving);
+
+                pageNickNamePath = "ms-appdata:///local/" + fileName + file.FileType.ToString();
+                BitmapImage bitMap = new BitmapImage(new Uri(pageNickNamePath));
+                NickPic.Source = bitMap;
+                ChattingViewModel.UpdateNick(pageNickNamePath);
+                this.DataContext = ChattingViewModel;
+            }
         }
     }
 }

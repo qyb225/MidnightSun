@@ -8,39 +8,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <!--<VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="VisualStateMin1">
-                    <VisualState.Setters>
-                        <Setter Target="FriendList.(Grid.ColumnSpan)" Value="2"/>
-                        <Setter Target="ChattingFrame.Visibility" Value="Collapsed"/>
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1"/>
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState x:Name="VisualStateMin600">
-                    <VisualState.Setters>
-                        <Setter Target="FriendList.(Grid.ColumnSpan)" Value="1"/>
-                        <Setter Target="ChattingFrame.Visibility" Value="Visible"/>
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="680"/>
-                    </VisualState.StateTriggers>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>-->
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <RelativePanel Grid.Column="0" Background="#353535">
-            <Image Height="30" RelativePanel.AlignTopWithPanel="True" Width="30" Margin="10" Source="Assets/IDPage/Test/tx.jpg"/>
-            <AppBarButton Icon="Setting" HorizontalAlignment="Center" RelativePanel.AlignBottomWithPanel="True" Foreground="LightGray"/>
-        </RelativePanel>
-        
-
-        <Frame x:Name="ChattingFrame" Grid.Column="1" HorizontalAlignment="Stretch" Background="#606060"/>
+        <Frame x:Name="GameFram"/>
     </Grid>
 </Page>
