@@ -17,7 +17,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Midnight_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxPackageDir>C:\Users\The Dark Knight\Desktop\Midnight\</AppxPackageDir>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86</AppxBundlePlatforms>
@@ -150,7 +150,6 @@
     <Content Include="Assets\IDPage\Test\tx.jpg" />
     <Content Include="Assets\Moment\01.jpg" />
     <Content Include="Assets\Moment\02.jpg" />
-    <Content Include="Assets\Moment\03.png" />
     <Content Include="Assets\news.jpg" />
     <Content Include="Assets\Story\X1.txt" />
     <Content Include="Assets\Story\X10.txt" />
@@ -167,6 +166,7 @@
     <Content Include="Assets\Story\X401.txt" />
     <Content Include="Assets\Story\X41.txt" />
     <Content Include="Assets\Story\X5.txt" />
+    <Content Include="Assets\test.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

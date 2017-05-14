@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="5bbe4e49-5b4a-4636-8843-ed9e67cea214" Publisher="CN=The Dark Knight" Version="1.0.0.0" />
+  <Identity Name="5bbe4e49-5b4a-4636-8843-ed9e67cea214" Publisher="CN=The Dark Knight" Version="1.1.1.0" />
   <mp:PhoneIdentity PhoneProductId="5bbe4e49-5b4a-4636-8843-ed9e67cea214" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Midnight</DisplayName>
@@ -17,6 +17,9 @@
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Midnight.App">
       <uap:VisualElements DisplayName="Midnight" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Midnight" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>

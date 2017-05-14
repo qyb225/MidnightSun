@@ -249,15 +249,15 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="20 0 0 0" x:Name="Me" RelativePanel.AlignBottomWith="Cover" RelativePanel.AlignLeftWithPanel="True">
                                 <Image Height="70" Width="70" Source="../Assets/IDPage/Test/logo.jpg"/>
-                                <TextBlock Text="Yokiho" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="White"/>
+                                <TextBlock Text="Christina" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="White"/>
                             </StackPanel>
                         </RelativePanel>
                         <TextBlock Grid.Row="1" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="签名" VerticalAlignment="Top" Margin="20 0 0 0"/>
                         <TextBlock Grid.Row="1" Grid.Column="1" Foreground="LightGray" Padding="0 20 0 20" Margin="0 0 20 0" TextWrapping="WrapWholeWords" Text="我们头上没有太阳，但是却不觉得黑暗，因为有能代替太阳的人在……"  VerticalAlignment="Top"/>
                         <TextBlock Grid.Row="2" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="兴趣" VerticalAlignment="Center" Margin="20 0 0 0" />
-                        <TextBlock x:Name="Hobby" Grid.Row="2" Foreground="LightGray" Padding="0 20 0 20" Grid.Column="1"  Margin="0 0 20 0" Text="音乐，电影，幻想" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="Hobby" Grid.Row="2" Foreground="LightGray" Padding="0 20 0 20" Grid.Column="1"  Margin="0 0 20 0" Text="音乐，绘画，幻想" VerticalAlignment="Center"/>
                         <Grid x:Name="TheMoment" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 30 0 20">
-                            <ListView IsItemClickEnabled="False" ItemsSource="{x:Bind MomentViewModels.AllItems}">
+                            <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind MomentViewModels.AllItems}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:DataType="md:MomentModelItems">
                                         <local:MomentItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
