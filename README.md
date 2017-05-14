@@ -11,9 +11,8 @@
 
 ---
 
-## 2017.05.10
+## 2017.05.14
 
-story文件夹里放置了所有的database，请将database每个文件复制出来，放置在LocalState文件夹里
-（复制时有冲突选择替换；LocalState在C:\Users\\%你的用户名%\AppData\Local\Packages\5bbe4e49-5b4a-4636-8843-ed9e67cea214_dmy56d650kmct\LocalState）
+已实现数据库自动写入local。编译运行即可。
 
 拒绝剧透，从我做起。
