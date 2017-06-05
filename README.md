@@ -6,15 +6,17 @@
 > 
 > This is a journey under the midnight sun
 
-
-*To be continued...*
-
 ---
 
-## 2017.05.10
+Do you ever think about the authenticity of the world?
 
-story文件夹里放置了所有的database，请将database每个文件夹里的文件复制出来（不要复制文件夹），放置在LocalState文件夹里
+<img src="./image/game.png" width = "555" height = "387" alt="" />
 
-![](./image/lady0.webp)
 
-拒绝剧透，从我做起。
+If the whole world is just a lie, what would you do?
+
+Help her and find all the secrets
+
+<img src="./image/ford0.webp" width = "600" height = "377" alt="" />
+
+----
