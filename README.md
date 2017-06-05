@@ -15,4 +15,6 @@
 
 story文件夹里放置了所有的database，请将database每个文件夹里的文件复制出来（不要复制文件夹），放置在LocalState文件夹里
 
+![](./image/lady0.webp)
+
 拒绝剧透，从我做起。
