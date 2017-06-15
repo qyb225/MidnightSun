@@ -50,7 +50,7 @@ id | msg | Flag
 
 ---
 
-每次加载，并都会存入**process（进度）**数据库db文件
+每次加载，并都会存入**process 进度**数据库db文件
 
 id | databse | num | next
  ------|------|----|----
