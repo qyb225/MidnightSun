@@ -93,7 +93,7 @@ id | databse | num | next
 
   技术难点之聊天窗口多种样式的消息如何正确选择并展示
 
-```
+```xml
 <ScrollViewer x:Name="ChattingScrollViewer"
                 Grid.Row="1"
                 VerticalScrollBarVisibility="Hidden"
@@ -123,7 +123,8 @@ id | databse | num | next
 ```
 其实他指向的是下面这一段代码
 这是一个选择器，将会根据数据中的标签选择不同的模板。
-```
+
+```cs
 namespace Midnight.Selector {
     public class MessageItemDataTemplateSelector : DataTemplateSelector {
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container) {
