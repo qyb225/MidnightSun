@@ -51,13 +51,14 @@ id | msg | Flag
 ---
 
 每次加载，并都会存入**process（进度）**数据库db文件
+
 id | databse | num | next
  ------|------|----|----
  1 | X1 | 5 | 2017-06-15/21:00:20
  
  ----
  
-如果是聊天信息，通过聊天界面的viewModel更新并存入**chattingInfo（聊天记录）** 数据库
+（1） 如果是聊天信息，通过聊天界面的viewModel更新并存入**chattingInfo（聊天记录）** 数据库
 *更新照片时重写所有sender为player的avatarPath*
  
  id | sender |  msg | avatarPath
@@ -68,13 +69,13 @@ id | databse | num | next
   4 | online | 对方已上线 |
   5 | offline | 对方已下线 |
 
-如果是朋友圈更新信息，朋友圈的viewModel更新并存入**朋友圈数据库**
+（2） 如果是朋友圈更新信息，朋友圈的viewModel更新并存入**朋友圈数据库**
 
  id | article |  image 
   ------|------|----
   1 | TA好帅 | ms-appdata:///local/ta.jpg
   
- 如果是新闻信息，新闻viewModel更新，存入**新闻数据库**
+ （3） 如果是新闻信息，新闻viewModel更新，存入**新闻数据库**
  
   id | news |  time
   ------|------|----
