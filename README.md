@@ -116,10 +116,15 @@ id | databse | num | next
 
 这是聊天窗口界面的最中间的核心部分。可以看到我们使用了ListView。但是我们没有直接将他绑定一个用户控件，为什么不这样做是有原因的。因为直接绑定一种DataTemplate虽然简单，但是不能实现我们这里复杂的情况。比如说对方的消息，和自己发出的消息，虽然在同一个ListView里，他们都是item但是他们要表现的样式是差别很大的，从位置到颜色等等。也不是没有想过最简单的写法就是隐藏和可视化不同的部件，达到好像看起来不同的消息有不同的效果。但是这样一来代码变得复杂，而且不利于进一步需求的增加，比如要是现在我要进一步支持图片类型的消息。这样就很难继续修改了。
 然后经过在网上寻找解决方案，最后找到ItemTemplateSelector的方法解决。
-首先再listview中间添加一个属性ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}"，这里面指向一个静态资源。
+首先再listview中间添加一个属性
+
+**ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}"**，
+
+这里面指向一个静态资源。
 在app里面可以找到这个静态资源
-```
-<selector:MessageItemDataTemplateSelector x:Key="MessageItemDataTemplateSelector"></selector:MessageItemDataTemplateSelector>
+
+```xml
+<selector:MessageItemDataTemplateSelector x:Key="MessageItemDataTemplateSelector" />
 ```
 其实他指向的是下面这一段代码
 这是一个选择器，将会根据数据中的标签选择不同的模板。
