@@ -163,3 +163,37 @@ namespace Midnight.Selector {
     }
 }
 ```
+
+将数据初始化到local文件夹
+前面提到过了我们使用数据库来存储包括剧情分支，游戏进度等等内容。但是对于到用户的电脑上，其local是没有这些数据库等等文件的，我们要在第一次运行时初始化这些东西。
+
+
+这个比较难的问题是直接在代码中进行读写文件其实受到一些权限的影响。我们只能访问一些local文件夹或者是asset里面预存并且打包的资源。所以我们将数据存在asset里面，然后利用文件读写api将其从asset中读取并且写入到local文件夹中间。
+UWP对于文件访问的限制还是很多的，所以这里其实很复杂，查了很多文件。最后利用buffer作为一个从流到流的中转。最后实现了这次初始化。
+```cs
+public async void loadStory() {
+            string[] fileName;
+            fileName = new string[15] { "X1", "X2", "X3", "X4", "X5", "X10", "X11", "X20", "X21", "X40", "X41", "X110", "X111", "X400", "X401" };
+            //读文件
+            //创建Uri，注意这里我们把后缀名改成了txt但实际上是db文件
+            foreach (var fileN in fileName) {
+                Uri uri = new Uri("ms-appx:///Assets/Story/" + fileN + ".txt");
+                //用Uri创建StorageFile
+                StorageFile originFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+                //获取进缓冲区
+                var buffer = await FileIO.ReadBufferAsync(originFile);
+
+                //写文件
+                //打开localstate文件夹
+                StorageFolder storageFolder = ApplicationData.Current.LocalCacheFolder;
+                //创建新文件
+                Windows.Storage.StorageFile sampleFile = await storageFolder.CreateFileAsync(fileN + ".db", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                //打开文件
+                StorageFile targetFile = await storageFolder.GetFileAsync(fileN + ".db");
+                //获得文件的流
+                var stream = await targetFile.OpenAsync(FileAccessMode.ReadWrite);
+                //用刚才的buffer写进去
+                await stream.WriteAsync(buffer);
+            }
+        }
+```
