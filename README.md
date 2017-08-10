@@ -17,7 +17,7 @@ If the whole world is just a lie, what would you do?
 
 Help her and find all the secrets
 
-<img src="./image/lady0.webp" width = "600" height = "350" alt="" />
+<img src="./image/lady0.png" width = "600" height = "350" alt="" />
 
 ----
 
