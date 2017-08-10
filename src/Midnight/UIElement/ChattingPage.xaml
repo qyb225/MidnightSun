@@ -183,7 +183,10 @@
                 </RelativePanel>
 
                 <ScrollViewer x:Name="ChattingScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-                    <ListView IsItemClickEnabled="False" SelectionMode="None" x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
+                    <ListView IsItemClickEnabled="False" SelectionMode="None"
+                              x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" 
+                              ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" 
+                              ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
