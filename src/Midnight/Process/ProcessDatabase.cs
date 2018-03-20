@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Midnight.Database {
-    public static class ChattingInfoDatabase {
-        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "ChattingInfo.db");
-        
+namespace Midnight.Process {
+    public class ProcessDatabase {
+        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Process.db");
+
         public static SQLiteConnection GetDbConnection() {
             var conn = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
-            conn.CreateTable<Models.ChattingItems>();
+            conn.CreateTable<Process>();
             return conn;
         }
     }

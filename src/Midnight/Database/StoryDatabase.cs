@@ -7,14 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Midnight.Database {
-    public static class ChattingInfoDatabase {
-        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "ChattingInfo.db");
-        
-        public static SQLiteConnection GetDbConnection() {
+    public static class StoryDatabase {
+        public static string DbPath { set; get; }
+
+        public static SQLiteConnection GetDbConnection(string data) {
+            DbPath = Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, data);
+            
             var conn = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
-            conn.CreateTable<Models.ChattingItems>();
+            conn.CreateTable<StoryInfo.StoryItem>();
             return conn;
         }
     }

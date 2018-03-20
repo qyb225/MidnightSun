@@ -6,14 +6,292 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="using:Midnight.Models"
+    xmlns:uie="using:Midnight.UIElement"
     mc:Ignorable="d">
-    <Grid HorizontalAlignment="Stretch">
-        <ListView IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModels.AllItems}" HorizontalAlignment="Stretch">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="md:ChattingItems">
-                    <local:ChattingBubble HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+    <Page.Resources>
+        <Style x:Key="MyListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Background" Value="{ThemeResource ListViewItemBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ListViewItemForeground}"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="IsHoldingEnabled" Value="True"/>
+            <Setter Property="Padding" Value="12,0,12,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}"/>
+            <Setter Property="AllowDrop" Value="False"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="FocusVisualMargin" Value="0"/>
+            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ListViewItemFocusVisualPrimaryBrush}"/>
+            <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+            <Setter Property="FocusVisualSecondaryBrush" Value="{ThemeResource ListViewItemFocusVisualSecondaryBrush}"/>
+            <Setter Property="FocusVisualSecondaryThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" 
+                       ContentMargin="{TemplateBinding Padding}" 
+                       CheckMode="Inline" 
+                       ContentTransitions="{TemplateBinding ContentTransitions}" 
+                       CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" 
+                       DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}" 
+                       DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" 
+                       DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}" 
+                       DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" 
+                       FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" 
+                       FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" 
+                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                       PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                       PressedBackground="#393939"
+                       PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}"
+                       PointerOverBackground="#414141"
+                       ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" 
+                       SelectedPressedBackground="#393939"
+                       SelectionCheckMarkVisualEnabled="True" 
+                       SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                       SelectedPointerOverBackground="#515151" 
+                       SelectedBackground="#4D4D4D"
+                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <RelativePanel Grid.Column="0" Background="#353535">
+            <Button x:Name="NickNameBtn" Click="NickNameBtn_Click" Background="Transparent" Height="50" Width="50" RelativePanel.AlignTopWithPanel="True">
+                <Image x:Name="NickPic" Height="30" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Center" Width="30"/>
+            </Button>
+            <AppBarButton Icon="Setting" HorizontalAlignment="Center" RelativePanel.AlignBottomWithPanel="True" Foreground="LightGray">
+                <AppBarButton.Flyout>
+                    <Flyout Placement="Bottom">
+                        <Flyout.FlyoutPresenterStyle>
+                            <Style TargetType="FlyoutPresenter">
+                                <Setter Property="Background" Value="#404040"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                        </Flyout.FlyoutPresenterStyle>
+                        <StackPanel>
+                            <Button Foreground="LightGray" Padding="5 0 0 0" BorderThickness="0" HorizontalAlignment="Stretch" Height="50" HorizontalContentAlignment="Left" Background="Transparent" Margin="0 3 0 3" Content="修改头像" Click="NickNameBtn_Click"/>
+                            
+                            <ToggleSwitch x:Name="Speed" Margin="5 5 0 0" Foreground="LightGray" OnContent="On" OffContent="Off" Toggled="Speed_Toggled">
+                                <ToggleSwitch.Header>
+                                    <TextBlock Text="加速模式" Foreground="LightGray"/>
+                                </ToggleSwitch.Header>
+                            </ToggleSwitch>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </RelativePanel>
+        <Grid x:Name="ChattingFrame" Grid.Column="1" HorizontalAlignment="Stretch" Background="#606060">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="244"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="FriendList" Grid.Column="0" Background="#464646">
+                <AutoSuggestBox x:Name="Search" Foreground="LightGray" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
+                            Margin="10" HorizontalAlignment="Stretch" />
+                <ListView IsItemClickEnabled="True" SelectionChanged="ListView_SelectionChanged" ItemClick="ListView_ItemClick" >
+                    <ListView.Items>
+                        <ListViewItem x:Name="Chatting" Style="{StaticResource MyListViewItemStyle}">
+                            <RelativePanel Height="80">
+                                <Grid x:Name="Header" RelativePanel.AlignBottomWithPanel="True"
+                               RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0 10 0 10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="10"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Height="50" Width="50" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Source="../Assets/IDPage/Test/logo.jpg"/>
+                                    <Ellipse x:Name="MsgCircle" Visibility="Collapsed" Fill="Red" Height="20" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2" Width="20"/>
+                                    <TextBlock x:Name="NumInfo" Visibility="Collapsed" Foreground="White" Margin="0 0 0 2" Text="{x:Bind UnRead, Mode=TwoWay}" FontSize="13" TextAlignment="Center"
+                                       Height="18" Grid.RowSpan="2" Grid.Column="1"
+                                       Grid.ColumnSpan="2" Width="20"/>
+                                </Grid>
+
+                                <StackPanel RelativePanel.AlignRightWithPanel="True" 
+                                    RelativePanel.RightOf="Header" RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignBottomWithPanel="True">
+                                    <TextBlock x:Name="NickName" Margin="4 20 10 0" Text="Christina" Foreground="LightGray" FontSize="17"/>
+                                    <TextBlock x:Name="LastMsg" Margin="4 5 10 10" Text="{x:Bind LastMessage, Mode=TwoWay}" 
+                                       HorizontalAlignment="Stretch" FontSize="13" Foreground="Gray"/>
+                                </StackPanel>
+                            </RelativePanel>
+                        </ListViewItem>
+                        <ListViewItem Style="{StaticResource MyListViewItemStyle}">
+                            <RelativePanel Height="80">
+                                <Grid x:Name="Header1" RelativePanel.AlignBottomWithPanel="True"
+                               RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0 10 0 10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="10"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Height="50" Width="50" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Source="../Assets/news.jpg"/>
+                                    <Ellipse x:Name="NewsCircle" Visibility="Collapsed" Fill="Red" Height="20" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2" Width="20"/>
+                                    <TextBlock x:Name="NumInfoNews" Visibility="Collapsed" Foreground="White" Margin="0 0 0 2" Text="{x:Bind UnReadNews, Mode=TwoWay}" FontSize="13" TextAlignment="Center"
+                                       Height="18" Grid.RowSpan="2" Grid.Column="1"
+                                       Grid.ColumnSpan="2" Width="20"/>
+                                </Grid>
+
+                                <StackPanel RelativePanel.AlignRightWithPanel="True" 
+                                    RelativePanel.RightOf="Header1" RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignBottomWithPanel="True">
+                                    <TextBlock  Margin="4 20 10 0" Text="今日热闻" Foreground="LightGray" FontSize="17"/>
+                                    <TextBlock Margin="4 5 10 10" Text="{x:Bind LastNews, Mode=TwoWay}" 
+                                       HorizontalAlignment="Stretch" FontSize="13" Foreground="Gray"/>
+                                </StackPanel>
+                            </RelativePanel>
+                        </ListViewItem>
+                    </ListView.Items>
+                </ListView>
+            </StackPanel>
+            <Grid x:Name="ChattingWindow" HorizontalAlignment="Stretch" Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="130"></RowDefinition>
+                </Grid.RowDefinitions>
+                <RelativePanel Grid.Row="0" Background="#525252">
+                    <TextBlock x:Name="Inputing" Text="" Margin="20,10,0,10" 
+                       FontSize="15" Foreground="White" RelativePanel.AlignVerticalCenterWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"/>
+                    <TextBlock Foreground="White" Text="Christina" RelativePanel.AlignVerticalCenterWithPanel="True"
+                       RelativePanel.AlignHorizontalCenterWithPanel="True"
+                       Margin="0,10,0,10" FontSize="18"/>
+                    <AppBarButton RelativePanel.AlignRightWithPanel="True" Icon="Contact" 
+                          Foreground="White" Click="AppBarButton_Click"/>
+                </RelativePanel>
+
+                <ScrollViewer x:Name="ChattingScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                    <ListView IsItemClickEnabled="False" SelectionMode="None"
+                              x:Name="TheChattingItem" SizeChanged="TheChattingItem_SizeChanged" 
+                              ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}" 
+                              ItemsSource="{Binding AllItems}" HorizontalAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </ScrollViewer>
+                <Grid Grid.Row="2" Background="#656565">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                        <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xE170;" Background="Transparent" Foreground="LightGray"/>
+                        <Button FontFamily="Segoe MDL2 Assets" FontSize="18" Content="&#xEB9F;" Background="Transparent" Foreground="LightGray"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="Choose0" Grid.Column="0" Margin="5 0 2 0" Visibility="Collapsed" Click="Choose0_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock x:Name="Choose0Text" Foreground="LightGray" VerticalAlignment="Center" HorizontalAlignment="Stretch"  TextWrapping="WrapWholeWords"/>
+                        </Button>
+                        <Button x:Name="Choose1" Grid.Column="1" Margin="2 0 5 0" Visibility="Collapsed" Click="Choose1_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock x:Name="Choose1Text" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Foreground="LightGray"  TextWrapping="WrapWholeWords"/>
+                        </Button>
+                    </Grid>
+                    <RelativePanel Grid.Row="2" Margin="5">
+                        <Button Foreground="LightGray" Content="发送" RelativePanel.AlignRightWithPanel="True" FontSize="13"/>
+                    </RelativePanel>
+                </Grid>
+            </Grid>
+
+            <Grid x:Name="PersonInfo" HorizontalAlignment="Stretch" Grid.Column="1" Visibility="Collapsed" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel  Padding="5 8 5 5" Background="#525252" Height="Auto">
+                    <Button x:Name="BackButton" FontFamily="Segoe MDL2 Assets" Click="BackButton_Click"
+                        FontSize="25" Content="&#xE00E;" Foreground="LightGray"  Background="Transparent" Margin="0 0 10 0"
+                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
+                    <TextBlock Text="关于TA" Foreground="LightGray" RelativePanel.RightOf="BackButton" RelativePanel.AlignVerticalCenterWithPanel="True" />
+                </RelativePanel>
+                <ScrollViewer x:Name="ScrollV" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                    <Grid x:Name="Diary">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <RelativePanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+                            <StackPanel x:Name="Cover" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                                <Image  Height="250" Stretch="UniformToFill" Source="../Assets/IDPage/Test/kugou.jpg" />
+                                <Grid Height="20"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="20 0 0 0" x:Name="Me" RelativePanel.AlignBottomWith="Cover" RelativePanel.AlignLeftWithPanel="True">
+                                <Image Height="70" Width="70" Source="../Assets/IDPage/Test/logo.jpg"/>
+                                <TextBlock Text="Christina" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="White"/>
+                            </StackPanel>
+                        </RelativePanel>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="签名" VerticalAlignment="Top" Margin="20 0 0 0"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Foreground="LightGray" Padding="0 20 0 20" Margin="0 0 20 0" TextWrapping="WrapWholeWords" Text="我们头上没有太阳，但是却不觉得黑暗，因为有能代替太阳的人在……"  VerticalAlignment="Top"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Foreground="LightGray" Padding="0 20 0 20" Text="兴趣" VerticalAlignment="Center" Margin="20 0 0 0" />
+                        <TextBlock x:Name="Hobby" Grid.Row="2" Foreground="LightGray" Padding="0 20 0 20" Grid.Column="1"  Margin="0 0 20 0" Text="音乐，绘画，幻想" VerticalAlignment="Center"/>
+                        <Grid x:Name="TheMoment" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 30 0 20">
+                            <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind MomentViewModels.AllItems}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="md:MomentModelItems">
+                                        <local:MomentItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+            <Grid x:Name="NewsInfo" HorizontalAlignment="Stretch" Grid.Column="1" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel  Padding="5 8 5 5" Background="#525252" Height="Auto">
+                    <TextBlock Text="全部新闻" Foreground="White" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" />
+                </RelativePanel>
+                <ScrollViewer x:Name="newsScroll" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                    <Grid Margin="10">
+                        <ListView x:Name="NewsList" IsItemClickEnabled="False" SizeChanged="NewsList_SizeChanged"  ItemsSource="{x:Bind NewsViewModel.AllItems}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="md:NewsModelItems">
+                                    <local:NewsItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
     </Grid>
+
 </Page>

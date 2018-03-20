@@ -1,5 +1,4 @@
-﻿using Midnight.UIElement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,19 +13,15 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Midnight
-{
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainPage : Page
-    {
-        public MainPage()
-        {
+namespace Midnight.UIElement {
+    public sealed partial class NewsItem : UserControl {
+        public Models.NewsModelItems NewsModelItems { get { return this.DataContext as Models.NewsModelItems; } }
+
+        public NewsItem() {
             this.InitializeComponent();
-            this.GameFram.Navigate(typeof(ChattingPage));
+            this.DataContextChanged += (s, e) => Bindings.Update();
         }
     }
 }

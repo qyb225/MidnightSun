@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace Midnight.Database {
-    public static class ChattingInfoDatabase {
-        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "ChattingInfo.db");
-        
+    public static class NewsDatabase {
+        public readonly static string DbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "News.db");
+
         public static SQLiteConnection GetDbConnection() {
             var conn = new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
-            conn.CreateTable<Models.ChattingItems>();
+            conn.CreateTable<Models.NewsModelItems>();
             return conn;
         }
     }

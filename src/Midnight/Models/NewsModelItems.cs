@@ -6,10 +6,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace Midnight.Models {
-    public class MomentModelItems : INotifyPropertyChanged {
+    public class NewsModelItems : INotifyPropertyChanged {
         [PrimaryKey]
         [AutoIncrement]
         public int id { set; get; }
@@ -26,25 +25,13 @@ namespace Midnight.Models {
             }
         }
 
-        private string image;
+        private string date;
         [MaxLength(20)]
-        public string Image {
-            get { return image; }
+        public string Date {
+            get { return this.date; }
             set {
-                if (image != value) {
-                    image = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        private BitmapImage bmpImage;
-        [Ignore]
-        public BitmapImage BmpImage {
-            get { return bmpImage; }
-            set {
-                if (bmpImage != value) {
-                    bmpImage = value;
+                if (date != value) {
+                    date = value;
                     NotifyPropertyChanged();
                 }
             }

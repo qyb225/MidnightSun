@@ -3,6 +3,69 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Midnight"
+    xmlns:selector="using:Midnight.Selector"
     RequestedTheme="Light">
+
+    <Application.Resources>
+
+        <DataTemplate x:Key="SelfMessageDataTemplate">
+            <Grid HorizontalAlignment="Right" Margin="5 8 5 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="0" Grid.Row="0" CornerRadius="4" Background="#49494A" Padding="13" >
+                    <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" Foreground="LightGray" FontSize="13" MaxWidth="400"></TextBlock>
+                </Grid>
+                <StackPanel Grid.Column="1" Grid.Row="0" Margin="0">
+                    <Image Height="35" Width="35" Source="{Binding NickImage}" Stretch="Fill" Margin="10,0,0,10" VerticalAlignment="Top" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MessageDataTemplate">
+            <Grid HorizontalAlignment="Left" Margin="5 8 5 8" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray" Padding="13">
+                    <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" FontSize="13" MaxWidth="400"></TextBlock>
+                </Grid>
+                <StackPanel Grid.Column="0" Grid.Row="0" Margin="0">
+                    <Image Height="35" Width="35" Source="../Assets/IDPage/Test/logo.jpg" Margin="0,0,10,10" VerticalAlignment="Top" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="OnlineDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="LightGreen"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="OfflineDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="#FF5050"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="SendMomentDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="LightGreen"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="TimeDataTemplate">
+            <Grid HorizontalAlignment="Center">
+                <TextBlock Height="15" Text="{Binding Msg}" FontSize="12" Foreground="LightGray"/>
+            </Grid>
+        </DataTemplate>
+        <selector:MessageItemDataTemplateSelector x:Key="MessageItemDataTemplateSelector"></selector:MessageItemDataTemplateSelector>
+    </Application.Resources>
 
 </Application>

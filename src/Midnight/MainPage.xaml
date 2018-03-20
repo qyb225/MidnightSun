@@ -5,54 +5,9 @@
     xmlns:local="using:Midnight"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uie="using:Midnight.UIElement"
     mc:Ignorable="d">
 
     <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="VisualStateMin1">
-                    <VisualState.Setters>
-                        <Setter Target="FriendList.(Grid.ColumnSpan)" Value="2"/>
-                        <Setter Target="ChattingFrame.Visibility" Value="Collapsed"/>
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1"/>
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState x:Name="VisualStateMin600">
-                    <VisualState.Setters>
-                        <Setter Target="FriendList.(Grid.ColumnSpan)" Value="1"/>
-                        <Setter Target="ChattingFrame.Visibility" Value="Visible"/>
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="680"/>
-                    </VisualState.StateTriggers>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
-                    
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="270"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <RelativePanel Grid.Column="0" Background="Gray">
-            <Image Height="30" RelativePanel.AlignTopWithPanel="True" Width="30" Margin="10" Source="Assets/IDPage/Test/tx.jpg"/>
-            <AppBarButton Icon="Setting" HorizontalAlignment="Center" RelativePanel.AlignBottomWithPanel="True" Foreground="LightGray"/>
-        </RelativePanel>
-        <StackPanel x:Name="FriendList" Grid.Column="1" Background="#313142">
-            <AutoSuggestBox x:Name="Search" Foreground="LightGray" QueryIcon="Find" PlaceholderText="搜索" Height="35" 
-                            Margin="10 10 10 30" HorizontalAlignment="Stretch" />
-            <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
-                <ListView.Items>
-                    <uie:ChattingItem/>
-                </ListView.Items>
-            </ListView>
-        </StackPanel>
-
-        <Frame x:Name="ChattingFrame" Grid.Column="2" HorizontalAlignment="Stretch" Background="#323246">
-        </Frame>
+        <Frame x:Name="GameFram"/>
     </Grid>
 </Page>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Midnight.Models {
     public class ChattingItems : INotifyPropertyChanged {
@@ -35,6 +36,32 @@ namespace Midnight.Models {
                 }
             }
         }
+
+        private string nickPath;
+        [MaxLength(20)]
+        public string NickPath {
+            get { return nickPath; }
+            set {
+                if (nickPath != value) {
+                    nickPath = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        
+        private BitmapImage nickImage;
+        [Ignore]
+        public BitmapImage NickImage {
+            get { return nickImage; }
+            set {
+                if (nickImage != value) {
+                    nickImage = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

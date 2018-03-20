@@ -6,215 +6,194 @@
 > 
 > This is a journey under the midnight sun
 
-
-*To be continued...*
-
 ---
 
-## Demo:
+Do you ever think about the authenticity of the world?
 
-![](./demoImage/20170425.gif)
-
-
----
-
-## Task for 漂亮的福源姐姐~
-
-### Task 1
-
-需要实现一个数据库负责记录剧情。每个数据库叫做X1, X10, X11, X2...(.db), X加一位数字代表主线剧情，X加两位数字代表用户选择的剧情。比如，如果用户在X1时选择了0，则进入X10， 如果选择了1，则进入X11，如果想写三线支线也是可以的，用X加三位数字就好了。
-
-*next一般都为空字符串""*
+<img src="./image/game.png" width = "555" height = "387" alt="" />
 
 
-**X1.db:**
+If the whole world is just a lie, what would you do?
 
-id | msg | Next
-------|------|----
-1 | Hello | ""
-2 | Thank you | ""
-3 | Are you OK? | "choose"
-4 | No, I'm not OK | ""
-5 | Yes, I'm very Ok | ""
+Help her and find all the secrets
 
-* **如何进入支线 (用户选择)**
-
-如果一个元素的Next是choose，则它下面只有两个元素，分别代表用户的 0选择和 1选择，**然后我们的故事将会进入支线剧情**如X10, 或者 X11。
-
-* **如何从用户支线选择模式返回主线:**
-
-在支线最后一句话中的next，写一下需要返回的剧情文件名字，如X2
-
-
-**X10.db:**
-
-id | msg | Next
-------|------|----
-1 | You are not ok！ | X2
-
-
-**X11.db:**
-
-id | msg | Next
-------|------|----
-1 | You are ok！ | X2
-
-最后一个元素next值不为空，直接进入 X2.db
-
+<img src="./image/lady0.png" width = "600" height = "350" alt="" />
 
 ----
 
-## Task for Snap!
+## 部分技术实现：
 
-### Task 1
+### 数据库部分：
 
-1. 需要实现一个page，page为聊天窗口，聊天对话框用最 low 方框 的就可以了。
-2. 用一个数据库存储你和她的所有对话：
+剧情数据库table：
+**X1.db**
 
-id | msg | sender
-------|------|----
-1 | 你好~ | 0
-2 | 我的名字叫做 Yukiho，你可以叫我……雪穗  | 0
-3 | 你好，很高兴认识你| 1
-4 | 我想给你说说心里话…… | 0
-... | ... | ...
-
-3. 页面被调起时，程序将会读入这个数据库里的所有信息，如果 **sender == 0**，聊天窗口显示在左侧（雪穗说的话），如果 **sender == 1**，这句话是“你”说的，聊天窗口显示在右边。默认加载到最下面。
-
-
-
-### Task 2, 3, 4, 5...
-
-To be continued...
-
----
+id | msg | Flag
+ ------|------|----
+1 |  | **online**
+2 |  | **time**
+3 | Hello！ | 
+4 | Are you OK？| 
+5 | Yes, I'm OK | **choose0 / choose1**
+6 | No, I'm not OK | 
+7 | TA好帅! | **moment**
+8 | | **offline**
+9 | 专家研究认为打代码不会导致脱发 | **news**
+10 | 60 | **delay**
+11 | | **X2.db**
 
 
-## 剧情存储
 
-*(Demo 不提供数据库，假设如下数据库已经实现的操作)*
+分支跳转示意图：
+
+<img src="./image/database.png" alt="" />
 
 ---
 
-2017.04.24更新 (先阅读原方法)：
+每次加载，并都会存入**process 进度**数据库db文件
 
-在每一个数据库，记录一个关键词作为next的值，如"choose"，用于判断是否需要调起用户选择选项：
-
-E.g.
-
-**X1.db:**
-
-id | msg | Next
-------|------|----
-1 | Hello | null
-2 | Thank you | null
-3 | Are you OK? | "choose"
-4 | No, I'm not OK | null
-5 | Yes, I'm very Ok | null
-
-让用户选择，0 or 1，读入用户输入，0或1，加载X1之后，如X10, X11，进入下一个。
-
-**X10.db:**
-
-id | msg | Next
-------|------|----
-1 | You are not ok！ | X2
-
-最后一个元素next值不为空，直接进入 X2.db
-
-**X11.db:**
-
-id | msg | Next
-------|------|----
-1 | You are ok！ | X2
+id | databse | num | next
+ ------|------|----|----
+ 1 | X1 | 5 | 2017-06-15/21:00:20
+ 
+ ----
+ 
+（1） 如果是聊天信息，通过聊天界面的viewModel更新并存入**chattingInfo（聊天记录）** 数据库
+*更新照片时重写所有sender为player的avatarPath*
+ 
+ id | sender |  msg | avatarPath
+  ------|------|----|----
+  1 | robot | 你好 | ms-appdata:///local/robot.jpg
+  2 | player | 你是谁？ | ms-appdata:///local/20170615030220.jpg
+  3 | time | 06-15/16:33 | 
+  4 | online | 对方已上线 |
+  5 | offline | 对方已下线 |
 
 
-设数据库中所有的元素为AllItems
+  ---
 
-```cs
+（2） 如果是朋友圈更新信息，朋友圈的viewModel更新并存入**朋友圈数据库**
 
-int flag = -1; // (means do not read)
-string choose[] = new string[2]; //Record choosing msg
+ id | article |  image 
+  ------|------|----
+  1 | TA好帅 | ms-appdata:///local/ta.jpg
 
-foreach (var item in AllItems) {
-    if (flag > -1) {
-        choose[flag++] = item.msg;
-    }
-    if (item.next == "choose") {
-        ++flag;
-    }
-}
 
+  ---
+  
+ （3） 如果是新闻信息，新闻viewModel更新，存入**新闻数据库**
+ 
+  id | news |  time
+  ------|------|----
+  1 | 专家研究认为打代码不会导致脱发 | 2017-06-15/22:00
+
+  ---
+
+  ### 界面与后台
+
+  技术难点之聊天窗口多种样式的消息如何正确选择并展示
+
+```xml
+<ScrollViewer x:Name="ChattingScrollViewer"
+                Grid.Row="1"
+                VerticalScrollBarVisibility="Hidden"
+                HorizontalScrollBarVisibility="Disabled">
+    <ListView IsItemClickEnabled="False"
+                SelectionMode="None"
+                x:Name="TheChattingItem"
+                SizeChanged="TheChattingItem_SizeChanged"
+                ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}"
+                ItemsSource="{Binding AllItems}"
+                HorizontalAlignment="Stretch">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            </Style>
+        </ListView.ItemContainerStyle>
+    </ListView>
+</ScrollViewer>
 ```
 
-----
+这是聊天窗口界面的最中间的核心部分。可以看到我们使用了ListView。但是我们没有直接将他绑定一个用户控件，为什么不这样做是有原因的。因为直接绑定一种DataTemplate虽然简单，但是不能实现我们这里复杂的情况。比如说对方的消息，和自己发出的消息，虽然在同一个ListView里，他们都是item但是他们要表现的样式是差别很大的，从位置到颜色等等。也不是没有想过最简单的写法就是隐藏和可视化不同的部件，达到好像看起来不同的消息有不同的效果。但是这样一来代码变得复杂，而且不利于进一步需求的增加，比如要是现在我要进一步支持图片类型的消息。这样就很难继续修改了。
+然后经过在网上寻找解决方案，最后找到ItemTemplateSelector的方法解决。
+首先再listview中间添加一个属性
 
-原方法：
+**ItemTemplateSelector="{StaticResource MessageItemDataTemplateSelector}"**，
 
-每个数据库只有最后一个的元素的Next的值可以是null或者非空。
+这里面指向一个静态资源。
+在app里面可以找到这个静态资源
 
-如果跑完一个数据库：
+```xml
+<selector:MessageItemDataTemplateSelector x:Key="MessageItemDataTemplateSelector" />
+```
+其实他指向的是下面这一段代码
+这是一个选择器，将会根据数据中的标签选择不同的模板。
 
-**1. 最后一个元素的Next的值是null，读取用户输入，然后加在文件名里。**
-**2. 最后一个元素的Next不是null，是例如"X2"，则直接读取Next对应值的db文件。**
+```cs
+namespace Midnight.Selector {
+    public class MessageItemDataTemplateSelector : DataTemplateSelector {
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container) {
+            if (item is ChattingItems) {
+                /*
+                 * 标签
+                 * 0 代表对方发出的消息
+                 * 1 代表自己发出的消息
+                 * 2 代表系统发出的消息的上线提示
+                 * 3 代表系统发出的消息的下线提示
+                 * 4 代表系统发出的朋友圈提醒消息
+                 * 5 代表系统发出de时间消息
+                 */
+                if ((item as ChattingItems).Sender == 1) {
+                    return App.Current.Resources["SelfMessageDataTemplate"] as DataTemplate;
+                } else if ((item as ChattingItems).Sender == 0) {
+                    return App.Current.Resources["MessageDataTemplate"] as DataTemplate;
+                } else if ((item as ChattingItems).Sender == 2) {
+                    return App.Current.Resources["OnlineDataTemplate"] as DataTemplate;
+                } else if ((item as ChattingItems).Sender == 3) {
+                    return App.Current.Resources["OfflineDataTemplate"] as DataTemplate;
+                } else if ((item as ChattingItems).Sender == 4) {
+                    return App.Current.Resources["SendMomentDataTemplate"] as DataTemplate;
+                } else if ((item as ChattingItems).Sender == 5) {
+                    return App.Current.Resources["TimeDataTemplate"] as DataTemplate;
+                }
+            }
 
----
+            return base.SelectTemplateCore(item);
+        }
+    }
+}
+```
 
-E.g.
-
-**X1.db:**
-
-id | msg | Next
-------|------|----
-1 | Hello | null
-2 | Thank you | null
-3 | Are you OK? | null
-
-读入用户输入，0或1，加载X1之后，如X10, X11，进入下一个。
-
-**X11.db:**
-
-id | msg | Next
-------|------|----
-1 | You are ok！ | X2
-
-**X10.db:**
-
-id | msg | Next
-------|------|----
-1 | You are not ok！ | X2
-
-最后一个元素next值不为空，直接进入 X2.db
-
-**X2.db:**
-
-id | msg | Next
-------|------|----
-1 | Do you like MI4-I? |null
-
-同理，读入用户输入，进入X21或X20
-
-**X21.db:**
-
-id | msg | Next
-------|------|----
-1 | You like MI4-I！ |null
-2 | I'm very glad you like！ |X3
-
-**X20.db:**
-
-id | msg | Next
-------|------|----
-1 | Oh, You don't like MI4-I? |null
-2 | You don't like me... |null
-3 | Nevermind~ |X3
-
-**X3.db:**
-
-id | msg | Next
-------|------|----
-1 | I will give everyone a MI-Band! |null
+将数据初始化到local文件夹
+前面提到过了我们使用数据库来存储包括剧情分支，游戏进度等等内容。但是对于到用户的电脑上，其local是没有这些数据库等等文件的，我们要在第一次运行时初始化这些东西。
 
 
-......
+这个比较难的问题是直接在代码中进行读写文件其实受到一些权限的影响。我们只能访问一些local文件夹或者是asset里面预存并且打包的资源。所以我们将数据存在asset里面，然后利用文件读写api将其从asset中读取并且写入到local文件夹中间。
+UWP对于文件访问的限制还是很多的，所以这里其实很复杂，查了很多文件。最后利用buffer作为一个从流到流的中转。最后实现了这次初始化。
+```cs
+public async void loadStory() {
+            string[] fileName;
+            fileName = new string[15] { "X1", "X2", "X3", "X4", "X5", "X10", "X11", "X20", "X21", "X40", "X41", "X110", "X111", "X400", "X401" };
+            //读文件
+            //创建Uri，注意这里我们把后缀名改成了txt但实际上是db文件
+            foreach (var fileN in fileName) {
+                Uri uri = new Uri("ms-appx:///Assets/Story/" + fileN + ".txt");
+                //用Uri创建StorageFile
+                StorageFile originFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+                //获取进缓冲区
+                var buffer = await FileIO.ReadBufferAsync(originFile);
 
+                //写文件
+                //打开localstate文件夹
+                StorageFolder storageFolder = ApplicationData.Current.LocalCacheFolder;
+                //创建新文件
+                Windows.Storage.StorageFile sampleFile = await storageFolder.CreateFileAsync(fileN + ".db", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                //打开文件
+                StorageFile targetFile = await storageFolder.GetFileAsync(fileN + ".db");
+                //获得文件的流
+                var stream = await targetFile.OpenAsync(FileAccessMode.ReadWrite);
+                //用刚才的buffer写进去
+                await stream.WriteAsync(buffer);
+            }
+        }
+```
