@@ -10,7 +10,7 @@
 
 Do you ever think about the authenticity of the world?
 
-<img src="./image/game.png" width = "555" height = "387" alt="" />
+<img src="./image/demo.gif" width = "555" height = "387" alt="" />
 
 
 If the whole world is just a lie, what would you do?
